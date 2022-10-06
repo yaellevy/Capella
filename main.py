@@ -60,6 +60,7 @@ class Capella(tk.Tk):
 
 
         self.geometry(f'{int(app_width)}x{int(app_height)}+{int(x)}+{int(y)}')
+        self.attributes('-alpha', 0.95)
 
         ttk.Style("darkly")
 
