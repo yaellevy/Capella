@@ -45,36 +45,31 @@ class Capella(tk.Tk):
         # create a container
         container = ttk.Frame()
         container.pack(side="top", fill="both", expand=True)
-
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-
+        # configure appearance
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
-
         app_width = screen_width / 2
         app_height = screen_width / 1.68
-
         x = (screen_width / 2) - (app_width / 2)
         y = (screen_height / 2.2) - (app_height / 2)
-
-
         self.geometry(f'{int(app_width)}x{int(app_height)}+{int(x)}+{int(y)}')
-        self.attributes('-alpha', 0.95)
-
+        #transparency
+        self.attributes('-alpha', 0.97)
         ttk.Style("darkly")
 
         tk.Tk.wm_title(self, "Capella")
 
+        # Add menu bar to top
         menubar = ttk.Menu(container)
-        #
-        info = ttk.Menu(menubar)
         filemenu = ttk.Menu(menubar, tearoff=0)
-        filemenu.add_command(label="Load Sights from Clipboard", command=lambda: load2(), accelerator='Ctrl+l')
+        filemenu.add_command(label="Load Sights from Clipboard", command=lambda: load_sights_from_clipboard(), accelerator='Ctrl+l')
         filemenu.add_separator()
         filemenu.add_command(label="Save Sights to Clipboard", command=lambda: save(), accelerator='Ctrl+s')
         filemenu.add_separator()
 
+        # liability pop-up message box
         message = "This program is intended for educational purposes only.\n\nYou accept the following: \nTHE " \
                   "SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT " \
                   "LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND " \
@@ -84,7 +79,7 @@ class Capella(tk.Tk):
                   "\nCopyright A.Spradling 2022 "
         Messagebox.ok(title='About', message=message)
 
-        # filemenu.add_command(label="Exit", command=quit)
+        filemenu.add_command(label="Exit", command=quit)
         menubar.add_cascade(label="File", menu=filemenu)
         tk.Tk.config(self, menu=menubar)
 
@@ -94,9 +89,7 @@ class Capella(tk.Tk):
         # iterating through a tuple of the different page layouts
         for F in (StartPage, PageOne, PageTwo, PageThree, PageFour, PageFive):
             frame = F(container, self)
-
             self.frames[F] = frame
-
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame(StartPage)
@@ -106,6 +99,7 @@ class Capella(tk.Tk):
         frame.tkraise()
 
 class StartPage(tk.Frame):
+    """Main Menu with buttons to reach other pages"""
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
@@ -115,35 +109,37 @@ class StartPage(tk.Frame):
         wrapper1 = ttk.LabelFrame(self, text='Menu')
         wrapper1.pack(padx=10, pady=10)
 
+        # sight entry page
         button4 = ttk.Button(wrapper1, text="Sight Entry",
                              command=lambda: controller.show_frame(PageFour), bootstyle='warning-outline')
         button4.pack(pady=50, padx=50)
         button4.configure(width=20)
 
+        # lop plot page
         button3 = ttk.Button(wrapper1, text="LOP Plot",
                              command=lambda: controller.show_frame(PageThree), bootstyle='warning-outline')
         button3.pack(pady=50, padx=50)
         button3.configure(width=20)
 
+        # fit slope page
         button2 = ttk.Button(wrapper1, text="Fit Slope Analysis",
                              command=lambda: controller.show_frame(PageTwo), bootstyle='warning-outline')
         button2.pack(pady=50, padx=50)
         button2.configure(width=20)
 
+        # planning/session page
         button = ttk.Button(wrapper1, text="Planning/Session Data",
                             command=lambda: controller.show_frame(PageOne), bootstyle='warning-outline')
         button.pack(pady=50, padx=50)
         button.configure(width=20)
 
+        # Azimuth page
         button5 = ttk.Button(wrapper1, text="Azimuth",
                              command=lambda: controller.show_frame(PageFive), bootstyle='warning-outline')
         button5.pack(pady=50, padx=50)
         button5.configure(width=20)
 
-
-
 class PageOne(tk.Frame, Sight):
-
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         # date
@@ -175,14 +171,12 @@ class PageOne(tk.Frame, Sight):
         notebook2.pack()
 
         # Frame for Sight Planning Entry Fields
-        test_text = 'To Use: \n\n 1. Set DR Position, DR Time, and Course/Speed in Sight Entry. \n \n 2. Input ' \
-                        'time you would like to plan for in Planning Controls, the DR Lat and Long on this page will ' \
-                        'update automatically with a new computed DR position, or you can manually enter a position ' \
-                        'if you would like. \n\n 3. Read the computed values in Body List and Optimal Triads. '
+
         frame = ttk.Frame(self)
         planlbl1 = ttk.Label(frame, text="Date UTC")
         planlbl1.grid(row=0, column=0, padx=5, pady=3)
-        helplbl1 = ttk.Label(frame, text='1. Set DR Position, DR Time, and Course/Speed on the first page (Sight Entry).                                ')
+        helplbl1 = ttk.Label(frame, text='1. Set DR Position, DR Time, and Course/Speed on the first page (Sight '
+                                         'Entry).                                ')
         helplbl1.grid(row=0, column=6, padx=5, pady=3)
         global planent1
         planent1 = ttk.Entry(frame, textvariable=plan1, width=12)
@@ -191,7 +185,9 @@ class PageOne(tk.Frame, Sight):
 
         planlbl2 = ttk.Label(frame, text="Time UTC")
         planlbl2.grid(row=1, column=0, padx=5, pady=3)
-        helplbl2 = ttk.Label(frame, text="2. Input the approximate time you would like to plan a sight session for. Press Set Time.\n The DR Lat and Long on this page will update automatically with a new computed DR position.")
+        helplbl2 = ttk.Label(frame, text="2. Input the approximate time you would like to plan a sight session for. "
+                                         "Press Set Time.\n The DR Lat and Long on this page will update "
+                                         "automatically with a new computed DR position.")
         helplbl2.grid(row=1, column=6, padx=5, pady=3)
 
         global planent2
@@ -199,46 +195,35 @@ class PageOne(tk.Frame, Sight):
         planent2.grid(row=1, column=2, padx=5, pady=3)
         planent2.insert(0, dt.datetime.utcnow().strftime('%H:%M:%S'))
 
-        # seperator = ttk.Separator(frame, orient=HORIZONTAL)
-        # seperator.grid(row=2, column=2, pady=3, columnspan=10)
+
 
         planbutton1 = ttk.Radiobutton(frame, text='Set Time', command=lambda: plan(),
                                       bootstyle="info-outline-toolbutton")
         planbutton1.grid(row=3, column=2, padx=5, pady=3)
 
-        # seperator = ttk.Separator(frame, orient=HORIZONTAL)
-        # seperator.grid(row=4, column=2, pady=3, columnspan=12)
-
         planlbl3 = ttk.Label(frame, text="DR Lat")
         planlbl3.grid(row=5, column=0, padx=5, pady=3)
         planent3 = ttk.Entry(frame, textvariable=plan3, width=12)
         planent3.grid(row=5, column=2, padx=5, pady=3)
-        helplbl3 = ttk.Label(frame,text="3. Browse the body lists to see all visible bodies as well as the optimal triads to create                    \n a shooting schedule                                               ")
+        helplbl3 = ttk.Label(frame,text="3. Browse the body lists to see all visible bodies as well as the optimal "
+                                        "triads to create                    \n a shooting schedule                  "
+                                        "                             ")
         helplbl3.grid(row=5, column=6, padx=5, pady=3)
         planlbl4 = ttk.Label(frame, text="DR Long")
         planlbl4.grid(row=6, column=0, padx=5, pady=3)
         planent4 = ttk.Entry(frame, textvariable=plan4, width=12)
         planent4.grid(row=6, column=2, padx=5, pady=3)
 
-        # seperator = ttk.Separator(frame, orient=VERTICAL)
-        # seperator.grid(row=0, column=3, pady=3, rowspan=12)
-
-
-
-        sight = tk.StringVar(self)
-
         def sight_data():
             for i in Sight.data_table:
                 sight = i
                 trv1.insert('', 'end', text='', iid=sight, values=sight)
 
-        # tree_scroll = ttk.Scrollbar(wrapper1)
-        # tree_scroll.pack(side='right', fill='y')
-
         global trv1
         global trvanl
         global trverror
 
+        # sight data treeview
         trv1 = ttk.Treeview(wrapper1, show='headings', height='12')
         trv1['columns'] = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
         trv1.column(1, anchor='center', width=60)
@@ -265,7 +250,6 @@ class PageOne(tk.Frame, Sight):
         trv1.heading(9, text="Ho")
         trv1.heading(10, text="Hc")
         trv1.heading(11, text="Int")
-
         ToolTip(trv1,
                 "This table has sight data displayed from the Sight Reduction computed on the Sight Entry Page. The "
                 "sights highlighted in green have the lowest scatter value per your observations of that body.",
@@ -273,6 +257,7 @@ class PageOne(tk.Frame, Sight):
 
         sight_data()
 
+        # sight analysis treeview
         trvanl = ttk.Treeview(wrapper2, show='headings', height='12')
         trvanl['columns'] = (1, 2, 3)
         trvanl.column(1, anchor='center', width=80)
@@ -283,9 +268,7 @@ class PageOne(tk.Frame, Sight):
         trvanl.heading(1, text='Body')
         trvanl.heading(2, text='Index')
         trvanl.heading(3, text="Time")
-
         notebook.add(trvanl, text='Best Sights')
-
         ToolTip(trvanl,
                 "This table has the sights per body with the lowest scatter value. These are also highlighted in "
                 "green in the table above.",
@@ -296,6 +279,7 @@ class PageOne(tk.Frame, Sight):
                 sight = i
                 trvanl.insert('', 'end', text='', iid=sight, values=sight)
 
+        # confidence interval treeview
         trverror = ttk.Treeview(wrapper2, show='headings', height='1')
         trverror.pack(side=tk.TOP, anchor='w', padx=10, pady=10)
         trverror['columns'] = (1, 2, 3, 4, 5)
@@ -304,35 +288,32 @@ class PageOne(tk.Frame, Sight):
         trverror.column(3, anchor='center', width=140)
         trverror.column(4, anchor='center', width=140)
         trverror.column(5, anchor='center', width=140)
-
         trverror.heading(1, text="N/S Err (nm) 68%")
         trverror.heading(2, text='E/W Err (nm) 68%')
         trverror.heading(3, text='N/S Err (nm) 95%')
         trverror.heading(4, text='E/W Err (nm) 95%')
         trverror.heading(5, text="Sys-Err (') ")
-
         notebook.add(trverror, text='Position Errors')
-
         ToolTip(trverror,
                 "A table with the one and two Sigma errors for the fitting algorithm converted into nautical mile "
                 "estimates.",
                 bootstyle=WARNING)
+
+        # times of phenomena treeview
         global trvphenom
         trvphenom = ttk.Treeview(wrapper3, show='headings', height='12')
         trvphenom['columns'] = (1, 2, 3)
         trvphenom.column(1, anchor='center')
         trvphenom.column(2, anchor='center')
         trvphenom.column(3, anchor='center')
-
         trvphenom.pack(side=tk.BOTTOM, padx=10, pady=10, anchor='w', expand='yes', fill='both')
         trvphenom.heading(1, text='Date GMT')
         trvphenom.heading(2, text=f'Date LMT')
         trvphenom.heading(3, text='Event')
-
         notebook2.add(frame, text='Planning Controls')
         notebook2.add(trvphenom, text='Time of Phenomena')
 
-        # Tree view for sight planning data
+        # sight planning treeview
         global trvsightplan
         trvsightplan = ttk.Treeview(wrapper3, show='headings', height='12')
         trvsightplan['columns'] = (1, 2, 3, 4)
@@ -340,21 +321,18 @@ class PageOne(tk.Frame, Sight):
         trvsightplan.column(2, anchor='center', width=140)
         trvsightplan.column(3, anchor='center', width=140)
         trvsightplan.column(4, anchor='center', width=140)
-
         trvsightplan.pack(side=tk.BOTTOM, padx=10, pady=10, anchor='w', expand='yes', fill='both')
         trvsightplan.heading(1, text='Body')
         trvsightplan.heading(2, text='Alt')
         trvsightplan.heading(3, text='Az')
         trvsightplan.heading(4, text='Mag')
-
-
         ToolTip(trvsightplan,
                 'Listed bodies are between 25° and 65° of altitude at the time and DR position specified under the '
                 'Planning Controls tab',
                 bootstyle=WARNING)
-
         notebook2.add(trvsightplan, text='Body List')
 
+        # optimized triad treeview
         global trvtriad
         trvtriad = ttk.Treeview(wrapper3, show='headings', height='12')
         trvtriad['columns'] = (1, 2, 3, 4)
@@ -362,7 +340,6 @@ class PageOne(tk.Frame, Sight):
         trvtriad.column(2, anchor='center', width=170)
         trvtriad.column(3, anchor='center', width=170)
         trvtriad.column(4, anchor='center', width=170)
-
         trvtriad.pack(side=tk.BOTTOM, padx=10, pady=10, anchor='w', expand='yes', fill='both')
         trvtriad.heading(1, text='Body')
         trvtriad.heading(2, text='Alt')
@@ -377,17 +354,11 @@ class PageOne(tk.Frame, Sight):
                         'time you would like to plan for in Planning Controls, the DR Lat and Long on this page will ' \
                         'update automatically with a new computed DR position, or you can manually enter a position ' \
                         'if you would like. \n\n 3. Read the computed values in Body List and Optimal Triads. '
-
         ToolTip(notebook2, text=sighthelptext, bootstyle=WARNING)
-
-
-
-
-
-
 
         global phenomena
         def phenomena():
+            """Refreshes the time of phenomena, sight planning and optimal triad treeviews"""
             for i in trvphenom.get_children():
                 trvphenom.delete(i)
             for i in trvsightplan.get_children():
@@ -397,15 +368,13 @@ class PageOne(tk.Frame, Sight):
             try:
                 latitude = cnav.Utilities.hmtstrtodecimald(t7.get(), t8.get())[0]
                 longitude = cnav.Utilities.hmtstrtodecimald(t8.get(), t8.get())[1]
-
                 # twilight and LAN times
                 phenomenatimes = cnav.Utilities.time_of_phenomena(t5.get(), t6.get(), latitude, longitude, t9.get(),
                                                                   t10.get())
-
                 for i in phenomenatimes:
                     trvphenom.insert('', 'end', text='', iid=i, values=i)
             except:
-                ValueError
+                # if DR info wasn't added...
                 returntopagefour = Messagebox.show_warning('Input Error',
                                                              'DR Latitude, DR Longitude, Course and Speed need to be '
                                                              'entered on 1. Sight Entry Page')
@@ -413,6 +382,8 @@ class PageOne(tk.Frame, Sight):
 
         global sight_planning
         def sight_planning(datetime, latitude, longitude):
+            """Function to find all visible celestial bodies at the time requested, and sort them into weighted
+            triads based on azimuth and magnitude """
 
             possibleobvs = []
             named_bodies = ['SunLL', 'SunUL', 'MoonLL', 'MoonUL', 'Mars', 'Venus', 'Jupiter', 'Saturn']
@@ -422,13 +393,13 @@ class PageOne(tk.Frame, Sight):
             for body in options:
                 ephem = cnav.Utilities.get_GHADEC(body, datetime, latitude, longitude)
                 obsv = (body, ephem[3].degrees, ephem[4].degrees, ephem[5])
-
-                if 15 < obsv[1] < 65:
+                # constrain to visible bodies that are easily shot
+                if 10 < obsv[1] < 65:
                     obsv = (body, cnav.Utilities.hmtstr(ephem[3].degrees), round(ephem[4].degrees), ephem[5])
                     possibleobvs.append(obsv)
 
             triads = []
-
+            # iterative process to create triad groupings
             for i in range(len(possibleobvs)):
                 one = possibleobvs[i]
                 try:
@@ -440,15 +411,12 @@ class PageOne(tk.Frame, Sight):
                                 difference2 = (possibleobvs[x][2] - possibleobvs[y][2]) % 360
                                 if difference2 > 115 and difference2 < 130:
                                     three = possibleobvs[y]
-
                                     triad = [one, two, three]
-
                                     triads.append(triad)
                 except:
                     pass
 
             sorted_triads = sorted(triads, key=lambda x: (x[0][3] + x[1][3] + x[2][3]) / 3)
-
             triad_bodies = []
             for i in range(len(sorted_triads)):
                 body_list = (sorted_triads[i][0][0], sorted_triads[i][1][0], sorted_triads[i][2][0])
@@ -476,11 +444,11 @@ class PageOne(tk.Frame, Sight):
                 for y in i:
                     trvtriad.insert('', 'end', text='', iid=counter, values=y)
                     counter += 1
-
             return
 
         global plan
         def plan():
+            """Grabs DR info from Sight Session page and feeds to other planning functions"""
             phenomena()
             planent3.delete(0, 'end')
             planent4.delete(0, 'end')
@@ -507,7 +475,6 @@ class PageOne(tk.Frame, Sight):
 
 # Fit Slope Page
 class PageTwo(ttk.Frame):
-
     def __init__(self, parent, controller):
         global f
         f = cnav.plt.figure(1)
@@ -557,7 +524,7 @@ class PageThree(ttk.Frame, Sight_Reduction):
         return
 
         controller.bind('<Control-p', reduce_sight)
-        controller.bind('<Control-l', load2)
+        controller.bind('<Control-l', load_sights_from_clipboard)
 
 
 # Sight Entry Page
@@ -568,40 +535,54 @@ class PageFour(ttk.Frame, Sight, Sight_session):
 
         f = cnav.plt.figure(2)
         ttk.Frame.__init__(self, parent)
+        # home button
         button1 = ttk.Button(self, text="Back to Home",
                              command=lambda: controller.show_frame(StartPage), bootstyle=OUTLINE)
         button1.pack(side=tk.TOP, anchor='n', padx=5, pady=10)
 
+        # Body input variable
         t1 = tk.StringVar(self)
+        # Hs input variable
         t2 = tk.StringVar(self)
+        # Sight Date input variable
         t3 = tk.StringVar(self)
+        # Sight Time input variable
         t4 = tk.StringVar(self)
-        # DR Date
+        # DR Date input variable
         global t5
         t5 = tk.StringVar(self)
-        # DR Time
+        # DR Time input variable
         global t6
         t6 = tk.StringVar(self)
-        # DR Lat
+        # DR Lat input variable
         global t7
         t7 = tk.StringVar(self)
-        # DR Long
+        # DR Long input variable
         global t8
         t8 = tk.StringVar(self)
+        # DR course input variable
         global t9
         t9 = tk.StringVar(self)
+        # DR speed input variable
         global t10
         t10 = tk.StringVar(self)
+        # index correction input variable
         t11 = tk.StringVar(self)
+        # H.O.E input variable
         t12 = tk.StringVar(self)
+        # temp input variable
         t13 = tk.StringVar(self)
+        # barometric pressure input variable
         t14 = tk.StringVar(self)
+        # fix date input variable
         t15 = tk.StringVar(self)
+        # fix time input variable
         t16 = tk.StringVar(self)
-        t17 = tk.StringVar(self)
-        t20 = tk.StringVar(self)
+        # t17 = tk.StringVar(self)
+        # t20 = tk.StringVar(self)
 
         def update_sight():
+            """Updates entry fields in 'Sight Entry' section"""
             selected = trv.focus()
             selection = trv.item(selected, 'values')
             trv.tag_configure('main', font=('Arial Bold', 10))
@@ -611,6 +592,8 @@ class PageFour(ttk.Frame, Sight, Sight_session):
 
         global save
         def save(event=''):
+            """ Saves Sight Session and Sight info from Sight List trv and Session Data section, formats it as a
+            Markdown table and saves to clipboard. """
             session_array = []
             sight_array = []
             session = (
@@ -620,7 +603,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
             for record in trv.get_children():
                 sight = trv.item(record, 'values')
                 sight_array.append(sight)
-
+            # create Markdown table
             session_headers = ["DR Date", "DR Time", "DR L", "DR λ", "Course", "Speed", "I.C.", "H.O.E", "Temp.",
                                "Press.", "Fix Date", "Fix Time"]
             session_copy = tabulate(session_array, headers=session_headers, tablefmt="github")
@@ -628,25 +611,23 @@ class PageFour(ttk.Frame, Sight, Sight_session):
 
             sight_copy = tabulate(sight_array, headers=sight_headers, tablefmt="github")
 
-            session_array = []
-            sight_array = []
-
             copied_data = session_copy + "\n \n" + sight_copy
             pc.copy(copied_data)
 
             return session_copy, sight_copy
 
-        global load2
-        def load2(event=''):
+        global load_sights_from_clipboard
+        def load_sights_from_clipboard(event=''):
+            """loads Sight Session DR info and Sights into the Session info Sights Treeview from the clipboard"""
             try:
+                # raw copied data
                 copied1 = pc.paste()
                 copied1 = re.sub(r" ", '', copied1)
-                # this is the session data
+                # split into session data chunk
                 split = str(copied1.split()[2]).strip("|")
-                # session = cnav.Sight_session(split)
 
                 length = len(split)
-
+                # further slice session chunk and populate Session info text fields
                 ent5.delete(0, 'end')
                 ent5.insert(0, (split.split('|')[0]))
                 ent6.delete(0, 'end')
@@ -672,23 +653,23 @@ class PageFour(ttk.Frame, Sight, Sight_session):
                 ent16.delete(0, 'end')
                 ent16.insert(0, split.split('|')[11])
 
+                # clear Sight Entry treeview
                 for i in trv.get_children():
                     trv.delete(i)
-
+                # populate Sight Entry treeview
                 for i in range(length):
                     try:
                         trv.tag_configure('main', font=('Arial Bold', 10))
-                        # Sight = cnav.Sight(copied1.split()[i + 1])
                         trv.insert('', 'end', text='', iid=i, values=(copied1.split()[i + 5]).strip("|").split('|'),
                                    tags=('main',))
                         PageFour.counter += 1
                     except:
                         pass
+            # if info is formatted incorrectly send error message
             except:
                 Messagebox.show_warning('Input Error', 'Data Formatted Incorrectly')
 
             return
-
         s = ttk.Style()
         s.map('Treeview', background=[('selected', 'grey')])
 
@@ -740,14 +721,16 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         global reduce_sight
 
         def reduce_sight(event=''):
+            """Strips data from Sight Entry page fields to instantiate Sight_session, Sight and Sight_Reduction
+            objects """
             avg_lbl.grid_forget()
             avg_lbl_2.grid_forget()
-
-            # creates session
+            # get necessary session data in list
             session_data_list = (
             t5.get(), t6.get(), t7.get(), t8.get(), t9.get(), t10.get(), t11.get(), t12.get(), t13.get(), t14.get(),
             t15.get(), t16.get())
             session_str = ','.join(session_data_list)
+            # instantiate Sight_session object
             global session
             session = Sight_session(session_str)
 
@@ -755,22 +738,22 @@ class PageFour(ttk.Frame, Sight, Sight_session):
             for record in trv.get_children():
                 value = trv.item(record, 'values')
                 value_str = ','.join(value)
+                # instantiate Sight objects for each entered Sight
                 sight = Sight(value_str)
 
-            # calculates fix
+            # instantiates Sight_Reduction object-calculates fix, calculates error statistics, plots LOPS
             global reduce
             reduce = Sight_Reduction(True)
 
             # Lop Plot/Clear for refresh - breaks zoom/pan
 
             canvas.draw()
-
             canvas2.draw()
 
 
             s = ttk.Style()
 
-            # clear treeviews for refresh
+            # clear treeviews on Session Info/Planning page for refreshing
             for i in trv1.get_children():
                 trv1.delete(i)
             for i in trvfix.get_children():
@@ -793,7 +776,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
                 trvanl.insert('', 'end', text='', iid=sight, values=sight)
                 best_index.append(trvanl.item(i, 'values')[1])
 
-                # enter sight data into treeview Page1
+            # enter sight data into treeview Page1
             for i in Sight.data_table:
 
                 if i[0] in best_index:
@@ -802,12 +785,6 @@ class PageFour(ttk.Frame, Sight, Sight_session):
                     trv1.insert('', 'end', text='', iid=i, values=i, tags=('best',))
                 else:
                     trv1.insert('', 'end', text='', iid=i, values=i)
-
-            # for i in trv.get_children():
-            #     if i in best_index:
-            #         trv.tag_configure('best', background='blue')
-            #         trv.insert('','end', text='',values=(trv.item(i,'values')),tags=('best',))
-            #         trv.delete(i)
 
             # enter statistical error table into treeview Page4
             for i in Sight_Reduction.stats_table_2:
@@ -822,22 +799,23 @@ class PageFour(ttk.Frame, Sight, Sight_session):
 
             systematicerr = np.mean(Sight_Reduction.d_array)
 
-            """If d value(scatter) is greater than 2.5 x the stdev of the other d values, it is likely erroneous"""
+            # get z_scores in list
             z_scores = scipy.stats.zscore(Sight_Reduction.d_array)
-
+            # if d value(scatter) has a z-score greater than 2, it is likely erroneous
             for d in Sight_Reduction.d_array:
                 if abs(z_scores[Sight_Reduction.d_array.index(d)]) > 2.0:
                     erroneous_body = Sight.body_array[Sight_Reduction.d_array.index(d)]
                     erroneous_sighttime = Sight.sight_times[Sight_Reduction.d_array.index(d)]
                     Messagebox.show_question(
-                        f'{erroneous_body} observation at {erroneous_sighttime} is likely erroneous.\nCorrect the observation or remove from Sight List, otherwise consider fix and analysis unreliable.')
+                        f'{erroneous_body} observation at {erroneous_sighttime} is likely erroneous.\nCorrect the '
+                        f'observation or remove from Sight List, otherwise consider fix and analysis unreliable.')
 
-            message = f"Capella found a Constant Error (Uncorrected Index Error + Personal Error) of {np.round(systematicerr, 2)}'.\n\nWould you like to remove this error and recompute?"
+            message = f"Capella found a Constant Error (Uncorrected Index Error + Personal Error) of {np.round(systematicerr, 2)}'.\n\nWould you like to remove this error and recompute? "
 
             for d in Sight_Reduction.d_array:
                 d_corr = d * (1 / np.var(Sight_Reduction.d_array))
 
-
+            # if the systematic error is greater than .25 arc minutes, something is off
             if abs(systematicerr) >= .25:
                 answer = Messagebox.show_question(message, 'Systematic Error')
                 if systematicerr < 0:
@@ -846,7 +824,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
                     systematicerr = systematicerr / 60 * -1
 
                 if answer == 'Yes':
-
+                    # remove systematic error from each Sight
                     for i in trv.get_children():
                         body = trv.item(i, 'values')[0]
                         hs = trv.item(i, 'values')[1]
@@ -855,7 +833,6 @@ class PageFour(ttk.Frame, Sight, Sight_session):
                         hs_deg, hs_min = hs.split('-')
                         hs = (float(hs_deg) + (float(hs_min) / 60))
                         hs = Angle(degrees=(hs))
-
                         hs = cnav.Utilities.hmtstr2(hs.degrees + (systematicerr))
                         trv.delete(i)
                         trv.insert('', 'end', text='', iid=i, values=(body, hs, date, time), tags=('main',))
@@ -922,35 +899,31 @@ class PageFour(ttk.Frame, Sight, Sight_session):
             return
 
         s = ttk.Style()
-
+        # Sight Entry page label frame wrappers
         wrapper1 = ttk.LabelFrame(self, text='Sight List')
-        wrapper2 = ttk.LabelFrame(self, text='Step 1 - Session Data')
-        wrapper3 = ttk.LabelFrame(self, text='Step 2 - Sight Entry')
-        wrapper4 = ttk.Labelframe(self, text='Fix')
-
         wrapper1.pack(fill='both', expand='yes', padx=10, pady=10)
-
+        wrapper2 = ttk.LabelFrame(self, text='Step 1 - Session Data')
         wrapper2.pack(fill='y', anchor='c', expand='yes', padx=10, pady=10)
-
+        wrapper3 = ttk.LabelFrame(self, text='Step 2 - Sight Entry')
         wrapper3.pack(fill='y', anchor='c', expand='yes', padx=10, pady=10)
+        wrapper4 = ttk.Labelframe(self, text='Fix')
         wrapper4.pack(fill='both', expand='yes', padx=10, pady=10)
 
+        # create Sight List treeview
         trv = ttk.Treeview(wrapper1, columns=(1, 2, 3, 4),
                            show='headings', height='12')
         trv.pack(fill='x')
-
         trv.column(1, anchor='center', width=140)
         trv.column(2, anchor='center', width=140)
         trv.column(3, anchor='center', width=140)
         trv.column(4, anchor='center', width=140)
-
         trv.heading(1, text='Body')
         trv.heading(2, text='Hs')
         trv.heading(3, text="Date")
         trv.heading(4, text="Time ")
         s.configure('Treeview.Heading', font=('Arial Bold', 9))
 
-        # fixtreeview
+        # create computer fix treeview
         trvfix = ttk.Treeview(wrapper4, show='headings', height='2')
         trvfix.pack(fill='x')
         trvfix['columns'] = (1, 2, 3, 4, 5)
@@ -959,17 +932,15 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         trvfix.column(3, anchor='center', width=140)
         trvfix.column(4, anchor='center', width=140)
         trvfix.column(5, anchor='center', width=140)
-
         trvfix.heading(1, text="Date")
         trvfix.heading(2, text='Computed L')
         trvfix.heading(3, text='Computed λ')
         trvfix.heading(4, text="DR L")
         trvfix.heading(5, text="DR λ")
 
-        # Error Treeview
         def check_time_format(x) -> bool:
+            """Checks for hh:mm:ss format"""
             import re
-
             pattern = r'^([0-1]?\d|2[0-3])(?::([0-5]?\d))?(?::([0-5]?\d))?$'
             match = re.search(pattern, x)
             if match:
@@ -979,18 +950,18 @@ class PageFour(ttk.Frame, Sight, Sight_session):
                 return False
 
         def check_date_format(x) -> bool:
+            """Checks for yyyy-mm-dd format"""
             import re
 
             pattern = r'^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$'
             match = re.search(pattern, x)
             if match:
-
                 return True
             else:
                 return False
 
         def check_hs_format(x) -> bool:
-
+            """Checks for dd-mm.t format"""
             pattern = r"^([0-8][0-9]|89)+-(0?[0-9]|[1-5][0-9])\.\d"
             match = re.search(pattern, x)
             if match:
@@ -1000,28 +971,25 @@ class PageFour(ttk.Frame, Sight, Sight_session):
                 return False
 
         def check_lat_format(x) -> bool:
-
+            """Checks for dd-mm.t-N/S format"""
             pattern = r"^([0-8][0-9]|89)+-(0?[0-9]|[1-5][0-9])\.\d-[N|S]+"
             match = re.search(pattern, x)
             if match:
-
                 return True
             else:
                 return False
 
         def check_long_format(x) -> bool:
-
+            """Checks for ddd-mm.t-E/W format"""
             pattern = r"^([0-1][0-9][0-9]|179)+-(0?[0-9]|[1-5][0-9])\.\d-[W|E]+"
             match = re.search(pattern, x)
             if match:
-
                 return True
             else:
                 return False
 
         def validate_number(x) -> bool:
             """Validates that the input is a number"""
-
             if x.strip('-').replace('.', '').isdigit():
                 return True
             elif x == "":
@@ -1041,6 +1009,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         options = named_bodies + named_stars
 
         # Sight data section
+        # Input fields for celestial object
         lbl1 = ttk.Label(wrapper3, text="Body", width=10, bootstyle=LIGHT)
         lbl1.config(font=SMALL_FONT)
         lbl1.grid(row=0, column=0, padx=5, pady=3)
@@ -1049,10 +1018,10 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         bodies['values'] = options
         bodies.grid(row=0, column=1, padx=5, pady=3)
 
+        # Input fields for hs values, changes format if an average of multiple sights is chosen
         lbl2 = ttk.Label(wrapper3, text="Hs", width=10, bootstyle=LIGHT)
         lbl2.config(font=SMALL_FONT)
         lbl2.grid(row=1, column=0, padx=2, pady=3)
-
         ent2 = ttk.Entry(wrapper3, textvariable=t2, width=10, validate='focus', validatecommand=(check_hs_format, '%P'))
         ent2.config(font=SMALL_FONT)
         ent2.insert(0, 'dd-mm.t')
@@ -1064,6 +1033,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         avg_lbl.grid_forget()
         ToolTip(ent2, text="dd-mm.t", bootstyle=WARNING)
 
+        # Input fields for Sight Date values, changes format if an average of multiple sights is chosen
         lbl3 = ttk.Label(wrapper3, text="Date UTC", width=10, bootstyle=LIGHT)
         lbl3.config(font=SMALL_FONT)
         lbl3.grid(row=2, column=0, padx=2, pady=3)
@@ -1073,6 +1043,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         ent3.grid(row=2, column=1, padx=2, pady=3)
         ToolTip(ent3, text="yyyy-mm-dd", bootstyle=WARNING)
 
+        # Input fields for Sight Time values, changes format if an average of multiple sights is chosen
         lbl4 = ttk.Label(wrapper3, text="Time UTC", width=10, bootstyle=LIGHT)
         lbl4.config(font=SMALL_FONT)
         lbl4.grid(row=3, column=0, padx=2, pady=3)
@@ -1086,22 +1057,22 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         avg_lbl_2.grid(row=3, column=2, padx=2, pady=3)
         avg_lbl_2.configure(foreground='red')
         avg_lbl_2.grid_forget()
-
         ent4.insert(0, 'hh:mm:ss')
 
         # Sight Session section
 
+        # DR Date entry fields
         lbl5 = ttk.Label(wrapper2, text="DR Date UTC", width=12, bootstyle=LIGHT)
         lbl5.config(font=SMALL_FONT)
         lbl5.grid(row=2, column=0, padx=5, pady=3)
         ent5 = ttk.Entry(wrapper2, textvariable=t5, width=10, validate='focus',
                          validatecommand=(check_date_format, '%P'))
         ent5.insert(0, dt.datetime.utcnow().strftime('%Y-%m-%d'))
-
         ent5.config(font=SMALL_FONT)
         ent5.grid(row=2, column=1, padx=5, pady=3)
         ToolTip(ent5, text="yyyy-mm-dd", bootstyle=WARNING)
 
+        # DR Time entry fields
         lbl6 = ttk.Label(wrapper2, text="DR Time UTC", width=12, bootstyle=LIGHT)
         lbl6.config(font=SMALL_FONT)
         lbl6.grid(row=3, column=0, padx=5, pady=3)
@@ -1112,6 +1083,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         ent6.insert(0, dt.datetime.utcnow().strftime('%H:%M:%S'))
         ToolTip(ent6, text="hh:mm:ss UTC", bootstyle=WARNING)
 
+        # DR Lat entry fields
         lbl7 = ttk.Label(wrapper2, text="DR Lat", width=12, bootstyle=LIGHT)
         lbl7.config(font=SMALL_FONT)
         lbl7.grid(row=4, column=0, padx=5, pady=3)
@@ -1122,6 +1094,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         ent7.insert(0, '37-45.8-N')
         ToolTip(ent7, text="dd-mm.t-N/S", bootstyle=WARNING)
 
+        # DR Long entry fields
         lbl8 = ttk.Label(wrapper2, text="DR Long", width=12, bootstyle=LIGHT)
         lbl8.config(font=SMALL_FONT)
         lbl8.grid(row=5, column=0, padx=5, pady=3)
@@ -1132,6 +1105,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         ent8.insert(0, '122-38.4-W')
         ToolTip(ent8, text="ddd-mm.t-E/W", bootstyle=WARNING)
 
+        # DR Course entry field
         lbl9 = ttk.Label(wrapper2, text="Course", width=12, bootstyle=LIGHT)
         lbl9.config(font=SMALL_FONT)
         lbl9.grid(row=2, column=2, padx=5, pady=3)
@@ -1141,6 +1115,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         ent9.insert(0, '000')
         ToolTip(ent9, text="ddd", bootstyle=WARNING)
 
+        # DR Speed entry field
         lbl10 = ttk.Label(wrapper2, text="Speed kts", width=12, bootstyle=LIGHT)
         lbl10.config(font=SMALL_FONT)
         lbl10.grid(row=3, column=2, padx=5, pady=3)
@@ -1150,6 +1125,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         ent10.grid(row=3, column=3, padx=5, pady=3)
         ent10.insert(0, '0.0')
 
+        # Index correction entry field
         lbl11 = ttk.Label(wrapper2, text="Index Corr.", width=12, bootstyle=LIGHT)
         lbl11.config(font=SMALL_FONT)
         lbl11.grid(row=4, column=2, padx=5, pady=3)
@@ -1160,6 +1136,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         ent11.insert(0, '+/-m.t')
         ToolTip(ent11, text="Enter correction\n On arc = -\n Off arc = +", bootstyle=WARNING)
 
+        # Height of eye entry field
         lbl12 = ttk.Label(wrapper2, text="H.O.E. ft", width=12, bootstyle=LIGHT)
         lbl12.config(font=SMALL_FONT)
         lbl12.grid(row=5, column=2, padx=5, pady=3)
@@ -1169,6 +1146,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         ent12.grid(row=5, column=3, padx=5, pady=3)
         ToolTip(ent12, text="ft", bootstyle=WARNING)
 
+        # Temperature entry field - only in Celcius
         lbl13 = ttk.Label(wrapper2, text="Temp C", width=12, bootstyle=LIGHT)
         lbl13.config(font=SMALL_FONT)
         lbl13.grid(row=2, column=4, padx=5, pady=3)
@@ -1178,6 +1156,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         ent13.grid(row=2, column=5, padx=5, pady=3)
         ent13.insert(0, '10')
 
+        # Barometric pressure entry field - only in milibars
         lbl14 = ttk.Label(wrapper2, text="Press. MB", width=12, bootstyle=LIGHT)
         lbl14.config(font=SMALL_FONT)
         lbl14.grid(row=3, column=4, padx=5, pady=3)
@@ -1187,6 +1166,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         ent14.grid(row=3, column=5, padx=5, pady=3)
         ent14.insert(0, '1010')
 
+        # Date of fix entry field
         lbl15 = ttk.Label(wrapper2, text="Fix Date UTC", width=12, bootstyle=LIGHT)
         lbl15.config(font=SMALL_FONT)
         lbl15.grid(row=4, column=4, padx=5, pady=3)
@@ -1195,6 +1175,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
         ent15.config(font=SMALL_FONT)
         ent15.grid(row=4, column=5, padx=5, pady=3)
 
+        # Time of fix entry field
         lbl16 = ttk.Label(wrapper2, text="Fix Time UTC", width=12, bootstyle=LIGHT)
         lbl16.config(font=SMALL_FONT)
         lbl16.grid(row=5, column=4, padx=5, pady=3)
@@ -1206,32 +1187,39 @@ class PageFour(ttk.Frame, Sight, Sight_session):
 
         seperator = ttk.Separator(wrapper3, orient=HORIZONTAL)
 
+        # Add Sight to Sight Field treeview
         add_btn = ttk.Button(wrapper3, text="Add", command=add_new, bootstyle=OUTLINE)
         add_btn.config(width=12)
         ToolTip(add_btn, text="Adds Sight to Sight Entry Field", bootstyle=WARNING)
         up_btn = ttk.Button(wrapper3, text="Update", command=update_sight, bootstyle=OUTLINE)
         up_btn.config(width=12)
         ToolTip(up_btn,
-                text="To Update a Sight Entry: \n 1. Click on sight in Sight Entry table. The Sight details will populate in the step 2 area.\n 2. Make any changes and click Update.",
+                text="To Update a Sight Entry: \n 1. Click on sight in Sight Entry table. The Sight details will "
+                     "populate in the step 2 area.\n 2. Make any changes and click Update.",
                 bootstyle=WARNING)
+
+        # Delete Sight from Sight Field treeview
         delete_btn = ttk.Button(wrapper3, text="Delete", command=delete_sight, bootstyle=OUTLINE)
         delete_btn.config(width=12)
         ToolTip(delete_btn,
-                text="To Delete a Sight Entry: \n 1. Click on sight in Sight Entry table. You can shift select as many sights as you'd like to delete. \n 2. Press Delete.",
+                text="To Delete a Sight Entry: \n 1. Click on sight in Sight Entry table. You can shift select as "
+                     "many sights as you'd like to delete. \n 2. Press Delete.",
                 bootstyle=WARNING)
+
+        # button to call reduce_sight function
         compute_btn = ttk.Button(wrapper4, text="COMPUTE FIX", command=reduce_sight, bootstyle='warning-outline')
+        ToolTip(compute_btn, text="Ctrl+p", bootstyle=WARNING)
+        # arrange buttons in grid
         seperator.grid(row=4, column=0, pady=10, columnspan=10)
         add_btn.grid(row=5, column=0, padx=10, pady=10)
         up_btn.grid(row=5, column=1, padx=10, pady=10)
-
         delete_btn.grid(row=5, column=2, padx=5, pady=3)
         compute_btn.pack(side=tk.BOTTOM, anchor='center', padx=10, pady=10)
         compute_btn.configure(width=20)
 
-        ToolTip(compute_btn, text="Ctrl+p", bootstyle=WARNING)
-
         def print_element(event):
-            # updates the Sight fields with trv data
+            """Click on a Sight in the Sight Field treeview and the Sight Entry input box values will change
+            respectively """
             trv = event.widget
             selected = trv.focus()
             selection = trv.item(selected, 'values')
@@ -1285,10 +1273,16 @@ class PageFour(ttk.Frame, Sight, Sight_session):
                     avg_lbl.grid_forget()
                     avg_lbl_2.grid_forget()
 
-        # checks time formats for hh:mm:ss and incomatible times like 25:00:00
-
-        # formats times as hh:mm:ss
         def insert_characters(event):
+            """Inserts - or : or . spacers characters inbetween typed values for faster and more accurate data input.
+            Parameters
+            ----------
+            sight time : hh:mm:ss, inserts(:)
+            dr time : hh:mm:ss, inserts(:)
+            fix time : hh:mm:ss, inserts(:)
+            hs : dd-mm.t, inserts(-) and (.)
+
+            """
             time_variables = t4.get() or t6.get() or t16.get()
             # hs
             if len(t2.get()) == 2:
@@ -1315,6 +1309,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
             planent2.insert(0, t6.get())
 
         def insert_position_characters(event):
+            """Inserts - or . spacer characters into lat/long values. Additionally, formats N/S/E/W suffix """
 
             # Latitude
             if len(t7.get()) == 2:
@@ -1324,7 +1319,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
             if len(t7.get()) == 7:
                 ent7.insert(7, f'-')
 
-            # auto corrects lower cases
+            # autocorrects lower cases
             try:
                 if len(t7.get()) == 9 and t7.get()[-1] == 'n' or t7.get()[-1] == 's':
 
@@ -1345,7 +1340,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
             if len(t8.get()) == 8:
                 ent8.insert(8, f'-')
 
-            # auto corrects lower cases
+            # autocorrects lower cases
             try:
                 if len(t8.get()) == 10 and t8.get()[-1] == 'e' or t8.get()[-1] == 'w':
 
@@ -1375,17 +1370,14 @@ class PageFour(ttk.Frame, Sight, Sight_session):
             planent1.insert(0, t5.get())
 
         trv.bind("<<TreeviewSelect>>", print_element)
-
         ent2.bind('<KeyRelease>', insert_characters, add='+')
-
         ent4.bind('<KeyRelease>', insert_characters, add='+')
         ent5.bind('<KeyRelease>', update_dates)
         ent6.bind('<KeyRelease>', insert_characters)
         ent7.bind('<KeyRelease>', insert_position_characters)
         ent8.bind('<KeyRelease>', insert_position_characters)
         ent16.bind('<KeyRelease>', insert_characters)
-
-        controller.bind('<Control-l>', load2)
+        controller.bind('<Control-l>', load_sights_from_clipboard)
         controller.bind('<Control-s>', save)
         controller.bind('<Control-p>', reduce_sight)
 
