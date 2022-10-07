@@ -36,7 +36,7 @@ The position calculation is provided by the robust Limited Memory-BFGS algorithm
 *Example 1:*
 
 The Sight Information below yields the fix: **40-14.0-N, 049-58.0-W**.
-
+```
 | DR Date   | DR Time  | DR L      | DR λ       | Course | Speed | I.C. | H.O.E | Temp. | Press. | Fix Date  | Fix Time |
 | --------- | -------- | --------- | ---------- | ------ | ----- | ---- | ----- | ----- | ------ | --------- | -------- |
 | 1993-5-13 | 07:30:00 | 40-10.0-N | 050-15.0-W | 090    | 5.5   | -1.2 | 7     | 10    | 1010   | 1993-5-13 | 07:44:00 |
@@ -49,7 +49,7 @@ The Sight Information below yields the fix: **40-14.0-N, 049-58.0-W**.
 | Altair     | 58-38.0 | 1993-05-13 | 07:39:02 |
 | Venus      | 15-15.3 | 1993-05-13 | 07:41:24 |
 | MoonLL     | 34-05.6 | 1993-05-13 | 07:44:08 |
-
+```
 by changing the DR Position to 00-00.0-N and 000-00.0-W *--a position 3673 nm away--* and keeping the same observation data, Capella yields the fix: **40-14.3-N, 049-57.8-W**. 
 
 **Systematic Error**
@@ -74,7 +74,7 @@ Capella uses the computer's clipboard as a means of loading and saving observati
 1. Simplicity. You can use one E-log for record keeping, note taking and to interact with the program. 
 2. Using the "Windows-Snap" features on a computer allows you to snap Capella to one side of the screen and snap the `.txt` sight log of choice to the other. Using the `ctrl` quick keys you can rapidly edit the observations in the `.txt` log and compute the observations in Capella side by side. 
 3. Most celestial navigation programs have UI issues that are difficult and frustrating to navigate, using this method, you can use any text editor as the primary controller of the program if you'd like. Simply use the below template:
-
+```
 | DR Date    | DR Time   | DR L      | DR λ       |   Course |   Speed |   I.C. |   H.O.E |   Temp. |   Press. | Fix Date   | Fix Time   |
 |------------|-----------|-----------|------------|----------|---------|--------|---------|---------|----------|------------|------------|
 | 2012-07-06 | 12:30:00  | 47-25.9-N | 007-08.0-W |      208 |      17 |    0.4 |      86 |      10 |     1010 | 2012-07-06 | 12:33:22   |
@@ -82,7 +82,7 @@ Capella uses the computer's clipboard as a means of loading and saving observati
 | Body   | Hs      | Date       | Time     |
 |--------|---------|------------|----------|
 | SunLL  | 65-03.4 | 2012-07-06 | 12:29:22 |
-
+```
 
 or, an even simpler format will work:
 
@@ -125,7 +125,7 @@ Each plot on the *Fit-Slope* page has a fitted *slope* and a *red dot*. The *slo
 *Example 2:*
 
 The following observations are taken and a fix of 21-11.0-N, 157-34.7-W is computed, the observer's actual position is: 21-12.0-N, 157-30.0-W. 
-
+```
 | DR Date    | DR Time   | DR L      | DR λ       |   Course |   Speed |   I.C. |   H.O.E |   Temp. |   Press. | Fix Date   | Fix Time   |
 |------------|-----------|-----------|------------|----------|---------|--------|---------|---------|----------|------------|------------|
 | 1990-01-02 | 03:00:00  | 21-12.0-N | 157-30.0-W |        0 |       0 |      0 |       0 |      10 |     1010 | 1990-01-02 | 03:12:00   |
@@ -141,7 +141,7 @@ The following observations are taken and a fix of 21-11.0-N, 157-34.7-W is compu
 | Deneb     | 48-38.0 | 1990-01-02 | 03:10:00 |
 | Fomalhaut | 38-37.0 | 1990-01-02 | 03:11:00 |
 | Aldebaran | 17-50.0 | 1990-01-02 | 03:12:00 |
-
+```
 
 The fit slope analysis shows that the Aldebaran observation at 03:07:00 scatters 9.79 arc minutes under the computed slope while the other Aldebaran observations are + 0.64' and + 1.74' respectively. This observation is clearly a blunder, and the LOP plot confirms that it is far away from our other LOPS so it is removed altogether from the *Sight List* and a new position is computed: 
 21-12.0-N, 157-31.5-W. The position can be further refined, by either selecting the individual sights with the least scatter, or averaging each set since the Fit-Slope analysis confirms their normal distribution, both methods will yield a fix with a similar level of accuracy. 
@@ -168,16 +168,16 @@ A weighting algorithm will list optimal groupings of 3 celestial objects based o
 *Example 3:*
 
 it is 2012-07-06 at 09:00:00 UTC and we wish to plan for the day's observations. We input the below information in the *Sight Entry* DR fields. 
-
+```
 | DR Date    | DR Time  | DR L      | DR λ       | Course | Speed | I.C. | H.O.E | Temp. | Press. |
 | ---------- | -------- | --------- | ---------- | ------ | ----- | ---- | ----- | ----- | ------ | 
 | 2012-07-06 | 09:00:00 | 48-18.4-N | 006-26.5-W | 208    | 17    | 0.4  | 86    | 10    | 1010   | 
- 
+```
 
 We enter the 2012-07-06, 09:00:00 UTC in the input fields in the Planning Controls tab and hit *Set Time*. We click on the time of phenomena tab and see that L.A.N. will occur at 12:33:21 UTC. and PM Nautical Twilight will be around 21:00:00 UTC. 
 
 At 12:30:00 UTC we begin a round of noon sights:
-
+```
 | DR Date    | DR Time   | DR L      | DR λ       |   Course |   Speed |   I.C. |   H.O.E |   Temp. |   Press. | Fix Date   | Fix Time   |
 |------------|-----------|-----------|------------|----------|---------|--------|---------|---------|----------|------------|------------|
 | 2012-07-06 | 12:30:00  | 47-25.9-N | 007-08.0-W |      208 |      17 |    0.4 |      86 |      10 |     1010 | 2012-07-06 | 12:33:22   |
@@ -191,7 +191,7 @@ At 12:30:00 UTC we begin a round of noon sights:
 | SunLL  | 65-05.6 | 2012-07-06 | 12:36:22 |
 | SunLL  | 65-05.6 | 2012-07-06 | 12:37:22 |
 | SunLL  | 65-05.4 | 2012-07-06 | 12:38:22 |
-
+```
 The *Fit Slope Analysis* tab confirms that our 12:33:22 observation was the meridian transit, agreeing with the computed 12:33:21 estimate. Our 12:33:00 computed Latitude at LAN is therefore 47-24.7- N, and the GHA of our LAN observation is 007-08.1 - this is listed in the *Sight Data* table. Our computed position is therefore 47-24.7-N, 007-08.1-W. 
 
 We enter our fix as our new DR on the *Sight Entry* page and enter 21:00:00 UTC - the approximate time of Nautical Twilight we computed earlier - in the time field under *Planning Controls*. Our 21:00:00 UTC DR position updates to 45-18.3-N, 008-46.0-W. Under *Body List* we see all of the optimal bodies to shoot for 21:00:00 UTC Star Time, calculated for DR position 45-18.3-N, 008-46.0-W. Under *Optimal Triads* we see the best 3-body groupings listed in order, weighted by azimuthal distribution, altitude and magnitude. 
@@ -215,7 +215,7 @@ The *Sight Data* table lists relevant almanac and observation data for the sight
 *Best Sights*
 
 A list of the observations with the lowest scatter values per body. If only one body is observed but at distinct times, then the 'best' value is computed for each block of time. For example, in the below example the 'best' values are computed for 3 distinct blocks of time, the 1993-07-07 21:00:00 and 23:00:00 sessions and the 1993-07-08, 00:30:00 session. 
-
+```
 | DR Date   | DR Time   | DR L    | DR λ     |   Course |   Speed |   I.C. |   H.O.E |   Temp. |   Press. | Fix Date   | Fix Time   |
 |-----------|-----------|---------|----------|----------|---------|--------|---------|---------|----------|------------|------------|
 | 1993-7-7  | 15:21:00  | 39-46-N | 161-20-W |      265 |       6 |   -1.5 |       9 |      10 |     1010 | 1993-7-8   | 00:33:12   |
@@ -228,7 +228,7 @@ A list of the observations with the lowest scatter values per body. If only one 
 | SunLL | 72-19.4 | 1993-7-7 | 23:03:49 |
 | SunLL | 63-00.2 | 1993-7-8 | 00:31:28 |
 | SunLL | 62-44.9 | 1993-7-8 | 00:33:12 |
-
+```
 In a case where all of the bodies are distinct, they are all their own 'best' and every sight will be listed under *Best Sights*  and will be highlighted green in the *Sight Data* field. 
 
 *Position Errors*
