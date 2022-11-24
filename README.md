@@ -1,10 +1,10 @@
-Capella
----
+# Capella
+
 ### Introduction
 
 Capella is a simple-to-use Astronavigation aid. The program will derive a celestial position from a minimum of inputs and plot the position on a chartlet, with an analysis of the accuracy of  computed position provided. The program  additionally features some helper functions for celestial observation session planning, DR computation and compass correction. 
 
-#### Section 1: Sight Entry
+## Section 1: Sight Entry
 
 **DR Information**
 
@@ -14,7 +14,7 @@ Capella uses the standard nautical conventions for time and position formatting,
 
 **Sight Entry**
 
-In the Step 2 section, complete the four required fields. All of the input fields will assist with autocompletion and formatting. The fields are: 1. Body 2. Hs Value 3. Sight Date 4. Sight Time. 
+In the Step 2 section, complete the four required fields. All the input fields will assist with autocompletion and formatting. The fields are: 1. Body 2. Hs Value 3. Sight Date 4. Sight Time. 
 All sextant altitude corrections are handled internally, simply input the Hs value for the observation.
 
 When you have completed the four input fields, hit the *Add* button and the sight will appear in the Sight List at the top of the screen. To edit previously entered information, click on the sight in the *Sight List*, the sight's information will populate the sight entry fields under Step 2. Make any required changes and hit *Update* and the sight entry will change in the *Sight List*. To remove a sight from the *Sight List*, simply click on the sight and hit *Delete*. Multiple sight handling is easily achieved using the conventional Shift or Ctrl + click features. 
@@ -66,7 +66,7 @@ Capella uses the computer's clipboard as a means of loading and saving observati
 3. Paste them in any .txt file you would like to use as a log. 
 
 *To Load Sights*
-1. Highlight the the 2 tables that you pasted into the .txt file of choice. 
+1. Highlight the 2 tables that you pasted into the .txt file of choice. 
 2. Copy to the computer's clipboard via CTRL-C or using the mouse.
 3. In Capella, click File-Load Sights from Clipboard or CTRL-l
 
@@ -84,13 +84,9 @@ Capella uses the computer's clipboard as a means of loading and saving observati
 | SunLL  | 65-03.4 | 2012-07-06 | 12:29:22 |
 ```
 
-or, an even simpler format will work:
 
-2012-07-07|12:30:00|47-25.9-N|007-08.0-W|208|17|0.4|86|10|1010|2012-07-06|12:33:22
 
-SunLL|65-03.4|2012-07-06|12:29:22
-
-#### Section 2: LOP Plot
+## Section 2: LOP Plot
 
 **Exploring the plot**
 
@@ -106,7 +102,7 @@ The LOPS are automatically advanced with the course and speed information provid
 
 The red dot on the LOP plot marks the computed position and the golden ellipse surrounding the computed fix represents an area of 95% confidence. That is, there is a 95% probability, *given the sight information provided* that the true position lies within the ellipse.
 
-#### Section 3: Fit Slope Analysis
+## Section 3: Fit Slope Analysis
 
 This is an implementation of Dr. David Burch's Fit Slope method. It is a means of deriving greater accuracy from our sight observations and attempting to spot any outliers or potential blunders. 
 
@@ -146,8 +142,8 @@ The following observations are taken and a fix of 21-11.0-N, 157-34.7-W is compu
 The fit slope analysis shows that the Aldebaran observation at 03:07:00 scatters 9.79 arc minutes under the computed slope while the other Aldebaran observations are + 0.64' and + 1.74' respectively. This observation is clearly a blunder, and the LOP plot confirms that it is far away from our other LOPS so it is removed altogether from the *Sight List* and a new position is computed: 
 21-12.0-N, 157-31.5-W. The position can be further refined, by either selecting the individual sights with the least scatter, or averaging each set since the Fit-Slope analysis confirms their normal distribution, both methods will yield a fix with a similar level of accuracy. 
 
-Section 4: Planning/Session Data
----
+## Section 4: Planning/Session Data
+
 
 **Sight Planning** 
 
@@ -237,8 +233,8 @@ A table with the one and two Sigma errors for the fitting algorithm converted in
 
 Celestial Navigation under the most optimal and rigorous circumstances can provide a positional accuracy of around 1 nm, it is not a GPS. As always the prudent navigator uses more than one means of position fixing to navigate.
 
-Section 5: Azimuth
----
+## Section 5: Azimuth
+
 
 **Observation Input**
 
