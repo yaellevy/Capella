@@ -17,7 +17,6 @@ from matplotlib.patches import Ellipse
 from tabulate import tabulate
 import scipy.optimize as optimize
 
-
 planets = load('de421.bsp')
 ts = load.timescale()
 
@@ -57,7 +56,7 @@ class Utilities():
 
         return time
 
-    def hmtstr(angle):
+    def hmt_str(angle):
         """ enter a skyfield angle object value in degrees, returns a str value formatted "dd°mm'".
 
         Parameters
@@ -71,7 +70,7 @@ class Utilities():
 
         return f"{deg}°{min}'"
 
-    def hmtstr2(angle):
+    def hmt_str_2(angle):
         """ enter a skyfield angle object value in degrees, returns a str value formatted "dd-mm".
 
         Parameters
@@ -85,7 +84,7 @@ class Utilities():
 
         return f"{deg}-{min}"
 
-    def hmtstrtodecimald(latstr, longstr):
+    def hmt_str_to_decimal_d(latstr, longstr):
         """ convert latitude and longitude string values into float values
 
         Parameters
@@ -153,7 +152,7 @@ class Utilities():
 
     def print_position(position, latitude=True):
         """ receives a float value latitude or longitude, adds N, S, E, W suffix based on type and value and converts
-        to str value using hmtstr function.
+        to str value using hmt_str function.
 
         Parameters
         ----------
@@ -171,7 +170,7 @@ class Utilities():
                 sign = 'S'
                 print_latitude = position * -1
 
-            final_string = (f'{Utilities.hmtstr(print_latitude)} {sign}')
+            final_string = (f'{Utilities.hmt_str(print_latitude)} {sign}')
         if latitude != True:
             if position > 0:
                 sign = "E"
@@ -180,13 +179,13 @@ class Utilities():
                 sign = "W"
                 print_longitude = position * -1
 
-            final_string = (f'{Utilities.hmtstr(print_longitude)} {sign}')
+            final_string = (f'{Utilities.hmt_str(print_longitude)} {sign}')
 
         return final_string
 
     def print_position2(position, latitude=True):
         """ receives a float value latitude or longitude, adds N, S, E, W suffix based on type and value and converts
-        to str value using hmtstr2 function.
+        to str value using hmt_str_2 function.
 
         Parameters
         ----------
@@ -204,7 +203,7 @@ class Utilities():
                 sign = 'S'
                 print_latitude = position * -1
 
-            final_string = (f'{Utilities.hmtstr2(print_latitude)}-{sign}')
+            final_string = (f'{Utilities.hmt_str_2(print_latitude)}-{sign}')
         else:
             if position > 0:
                 sign = "E"
@@ -213,11 +212,11 @@ class Utilities():
                 sign = "W"
                 print_longitude = position * -1
 
-            final_string = (f'{Utilities.hmtstr2(print_longitude)}-{sign}')
+            final_string = (f'{Utilities.hmt_str_2(print_longitude)}-{sign}')
 
         return final_string
 
-    def singlebodytimedivide(obj_array):
+    def single_body_time_divide(obj_array):
         """ receives an array of single body sight tuples and splits them into buckets based on a 900-second (15 min)
             interval, it will then return the sight-time with the lowest d-value from each bucket. For example,
             6 shots of the sun with a group of 3 at 1000, and 3 at or around LAN is 2 sessions. It will return
@@ -371,8 +370,8 @@ class Utilities():
 
         sunstr = str(tsun.astimezone(tz))[:19]
         time_delta = dt.timedelta.total_seconds(tsun.astimezone(tz) - datetime)
-        second_estimate_lat = dr_calc(dr_lat, dr_long, time_delta, course, speed).drlatfwds
-        second_estimate_long = dr_calc(dr_lat, dr_long, time_delta, course, speed).drlongfwds
+        second_estimate_lat = DRCalc(dr_lat, dr_long, time_delta, course, speed).drlatfwds
+        second_estimate_long = DRCalc(dr_lat, dr_long, time_delta, course, speed).drlongfwds
         position2 = wgs84.latlon(second_estimate_lat, second_estimate_long)
         f_1 = almanac.meridian_transits(eph, eph['Sun'], position2)
         suntimes, sunevents = almanac.find_discrete(t0, t1, f_1)
@@ -409,7 +408,7 @@ class Utilities():
 
         return phenomenatimes
 
-    def get_GHADEC(body, datetime, latitude, longitude):
+    def get_gha_dec(body, datetime, latitude, longitude):
         """ receives celestial object, date and position and returns gha, dec, ghaa, alt, az and magnitude using
         the Skyfield library, hipparcos catalog and DE421 database.
 
@@ -461,17 +460,13 @@ class Utilities():
             mag = df['magnitude'][hid]
 
         obs = planets['Earth']
-
         position = obs + Topos(latitude_degrees=(latitude), longitude_degrees=(longitude))
-
         astro = position.at(t).observe(celestial_body)
         app = astro.apparent()
-
         astrometric = obs.at(t).observe(celestial_body)
         apparent = obs.at(t).observe(celestial_body).apparent()
         alt, az, distance = app.altaz()
         ra, dec, distance, = apparent.radec(epoch='date')
-
         ghaa = Angle(degrees=(t.gast) * 15)
         gha = Angle(degrees=((t.gast - ra.hours) * 15 % 360 - 0))
 
@@ -512,7 +507,7 @@ class Utilities():
 
 
 
-class dr_calc():
+class DRCalc():
     """
     dr_calc() : will calculate a mercator sailing based on a position,
     C/S and a dt.dimedelta object. It can DR from a position either forwards or backwards
@@ -528,12 +523,12 @@ class dr_calc():
         self.timedelta = float(timedelta) / 3600
         self.course = float(course)
         self.speed = float(speed)
-        self.drcoordcalcfwd()
-        self.drcoordcalcbwd()
+        self.dr_coord_calc_fwd()
+        self.dr_coord_calc_bwd()
 
         return
 
-    def drcoordcalcfwd(self):
+    def dr_coord_calc_fwd(self):
         self.distance = self.timedelta * self.speed
         if self.course == 90:
             self.lat2 = self.init_lat
@@ -565,7 +560,7 @@ class dr_calc():
 
         return
 
-    def drcoordcalcbwd(self):
+    def dr_coord_calc_bwd(self):
 
         self.course = (self.course - 180) % 360
         self.distance = self.timedelta * self.speed
@@ -600,9 +595,7 @@ class dr_calc():
             self.drlongbackwards = self.drlongbackwards - 360
         return
 
-
-
-class Sight_session():
+class SightSession():
     """
     The Sight_session class takes all, of the pre-sight information that is relevant for the reduction process and
     passes it down to each Sight class. The idea is to represent an actual Sight-taking process. The Sight_session class
@@ -647,12 +640,12 @@ class Sight_session():
         fixhr, fixmin, fixsec = fixtime.split(':')
         self.fixtime = dt.datetime(int(fix_year), int(fix_month), int(fix_day), int(fixhr), int(fixmin), int(fixsec),
                                    tzinfo=tz)
-        Sight_session.dr_details.append(
+        SightSession.dr_details.append(
             [self.datetime, self.dr_lat, self.dr_long, self.course, self.speed, self.i_e, self.h_o_e, self.temp,
              self.pressure, self.fixtime])
         return
 
-class Sight(Sight_session):
+class Sight(SightSession):
     """
     The Sight class represents each individual sextant sight. It has a data/time a sextant Hs and a Body. Each Sight class
     instance is passed to the Sight_Reduction class.
@@ -715,7 +708,7 @@ class Sight(Sight_session):
         self.get_dr_details()
         self.get_sight_dr_positions()
 
-        self.compute_GHA_DEC()
+        self.compute_gha_dec()
         self.dip_correction()
         self.index_correction()
         self.ha_calc()
@@ -732,11 +725,11 @@ class Sight(Sight_session):
                            Utilities.print_position(self.computed_lat, latitude=True),
                            Utilities.print_position(self.computed_long, latitude=False),
                            f'{self.time}',
-                           f'{Utilities.hmtstr(self.GHA.degrees)}',
-                           f'{Utilities.hmtstr(self.DEC.degrees)}',
+                           f'{Utilities.hmt_str(self.GHA.degrees)}',
+                           f'{Utilities.hmt_str(self.DEC.degrees)}',
                            f'{round(self.AZ.degrees, )}',
-                           f'{Utilities.hmtstr(self.ho.degrees)}',
-                           f'{Utilities.hmtstr(self.hc.degrees)}',
+                           f'{Utilities.hmt_str(self.ho.degrees)}',
+                           f'{Utilities.hmt_str(self.hc.degrees)}',
                            f'{format(self.int, ".1f")}'
                            ]
 
@@ -753,7 +746,7 @@ class Sight(Sight_session):
 
     def get_dr_time_delta(self):
         """Computes the time delta in seconds between the DR time and the time of the Sight"""
-        self.dr_time = Sight_session.dr_details[0][0]
+        self.dr_time = SightSession.dr_details[0][0]
         self.sighttime = self.datetime
         self.drtimedelta = dt.timedelta.total_seconds(self.sighttime - self.dr_time)
 
@@ -761,10 +754,10 @@ class Sight(Sight_session):
 
     def get_dr_details(self):
         """Fetches DR Lat, Long, Course, Speed from Sight_session class dr_details list"""
-        self.dr_lat = Sight_session.dr_details[0][1]
-        self.dr_long = Sight_session.dr_details[0][2]
-        self.course = Sight_session.dr_details[0][3]
-        self.speed = Sight_session.dr_details[0][4]
+        self.dr_lat = SightSession.dr_details[0][1]
+        self.dr_long = SightSession.dr_details[0][2]
+        self.course = SightSession.dr_details[0][3]
+        self.speed = SightSession.dr_details[0][4]
 
         return
 
@@ -775,14 +768,14 @@ class Sight(Sight_session):
         course = self.course
         speed = self.speed
         timed = self.drtimedelta
-        self.computed_lat = dr_calc(lat, long, timed, course.degrees, speed).drlatfwds
-        self.computed_long = dr_calc(lat, long, timed, course.degrees, speed).drlongfwds
+        self.computed_lat = DRCalc(lat, long, timed, course.degrees, speed).drlatfwds
+        self.computed_long = DRCalc(lat, long, timed, course.degrees, speed).drlongfwds
         Sight.computedlat.append(self.computed_lat)
         Sight.computedlong.append(self.computed_long)
 
         return
 
-    def compute_GHA_DEC(self):
+    def compute_gha_dec(self):
         """Functionally identical to Get_GHA_DEC function in utilities, just called every time a Sight Object
          is initialized"""
         body = self.body
@@ -834,7 +827,7 @@ class Sight(Sight_session):
 
     def dip_correction(self):
         """Uses height of eye in feet provided in Sight_session.dr_details to compute dip correction"""
-        dip_corr = Angle(degrees=(-1 * (.97 * np.sqrt(Sight_session.dr_details[0][6])) / 60))
+        dip_corr = Angle(degrees=(-1 * (.97 * np.sqrt(SightSession.dr_details[0][6])) / 60))
         self.dip_corr = dip_corr
 
         return
@@ -842,7 +835,7 @@ class Sight(Sight_session):
     def index_correction(self):
         """Uses user provided index error in arc minutes provided in Sight_session.dr_details to compute dip
         correction """
-        index_corr = Sight_session.dr_details[0][5]
+        index_corr = SightSession.dr_details[0][5]
         self.index_corr = index_corr
 
         return
@@ -880,19 +873,19 @@ class Sight(Sight_session):
 
         if body == 'Venus' or body == 'Mars':
             parallax_corr = Angle(degrees=(self.hp_degrees.degrees * np.cos(self.ha.radians) * (
-                    1 - (np.sin(np.deg2rad(Sight_session.dr_details[0][1])) ** 2.0) / 297.0)))
+                    1 - (np.sin(np.deg2rad(SightSession.dr_details[0][1])) ** 2.0) / 297.0)))
             self.parallax_corr = parallax_corr
 
         elif body == 'SunLL' or body == 'SunUL':
             parallax_corr = Angle(degrees=(self.hp_degrees.degrees * np.cos(self.ha.radians) *
-                                           (1 - (np.sin(np.deg2rad(Sight_session.dr_details[0][1])) ** 2.0) / 297.0)))
+                                           (1 - (np.sin(np.deg2rad(SightSession.dr_details[0][1])) ** 2.0) / 297.0)))
             self.parallax_corr = parallax_corr
 
         elif body == 'MoonLL' or body == 'MoonUL':
 
             OB = Angle(degrees=(-0.0017 * np.cos(self.ha.radians)))
             parallax_corr = Angle(degrees=(self.hp_degrees.degrees * np.cos(self.ha.radians) *
-                                           (1 - (np.sin(np.deg2rad(Sight_session.dr_details[0][1])) ** 2.0) / 297.0)))
+                                           (1 - (np.sin(np.deg2rad(SightSession.dr_details[0][1])) ** 2.0) / 297.0)))
 
             self.parallax_corr = Angle(degrees=parallax_corr.degrees + OB.degrees)
 
@@ -927,8 +920,8 @@ class Sight(Sight_session):
 
     def refraction(self):
         """Calculates refraction correction in degrees for celestial object"""
-        pmb = Sight_session.dr_details[0][8]
-        TdegC = Sight_session.dr_details[0][7]
+        pmb = SightSession.dr_details[0][8]
+        TdegC = SightSession.dr_details[0][7]
         f = 0.28 * pmb / (TdegC + 273.0)
         ro = -1 * ((0.97127 / np.tan(self.ha.radians)) - (0.00137 / (np.tan(self.ha.radians)) ** 3)) / 60
         self.ref = Angle(degrees=(ro * f))
@@ -972,9 +965,9 @@ class Sight(Sight_session):
         return
 
 
-class Sight_Reduction(Sight):
-    """ The main Sight Reduction algorithm and plotting algorithms live here. Sight_Reduction() doesn't fire unless
-    it is instantiated as True, and will not work unless the required arrays in Sight() and Sight_session() are
+class SightReduction(Sight):
+    """ The main Sight Reduction algorithm and plotting algorithms live here. SightReduction() doesn't fire unless
+    it is instantiated as True, and will not work unless the required arrays in Sight() and SightSession() are
     filled. For multiple Sight Reductions (essential for the iterative recomputations), the arrays need to be reset
     to empty every time, this happens in main.py currently.
 
@@ -1014,9 +1007,9 @@ class Sight_Reduction(Sight):
         """Computes the time delta in total seconds between the user provided time of fix and the time of each sight
         object, appends to Sight_Reduction.time_delta_array
         """
-        fix_time = Sight_session.dr_details[0][9]
+        fix_time = SightSession.dr_details[0][9]
         for i in range(Sight.num_of_sights):
-            Sight_Reduction.time_delta_array.append(dt.timedelta.total_seconds(fix_time - Sight.sight_times[i]))
+            SightReduction.time_delta_array.append(dt.timedelta.total_seconds(fix_time - Sight.sight_times[i]))
         return
 
     def ho_correction(self):
@@ -1033,10 +1026,10 @@ class Sight_Reduction(Sight):
 
         """
         for i in range(Sight.num_of_sights):
-            Sight_Reduction.ho_corrections_array.append((Sight_session.dr_details[0][4]
-                                                         * (Sight_Reduction.time_delta_array[i] / 3600)) / 60
-                                                        * np.cos(Sight.sight_az_array[i].radians
-                                                                 - Sight_session.dr_details[0][3].radians))
+            SightReduction.ho_corrections_array.append((SightSession.dr_details[0][4]
+                                                        * (SightReduction.time_delta_array[i] / 3600)) / 60
+                                                       * np.cos(Sight.sight_az_array[i].radians
+                                                                 - SightSession.dr_details[0][3].radians))
 
         return
 
@@ -1044,8 +1037,8 @@ class Sight_Reduction(Sight):
         """Sums Sight.ho_array and Sight_Reduction.ho_corrections_array to create Sight_Reduction.ho_array_rfix,
         an array of Ho's corrected for the movement of the vessel to compute a running fix. """
         for i in range(Sight.num_of_sights):
-            Sight_Reduction.ho_array_rfix.append(
-                np.deg2rad(Sight.ho_array[i] + Sight_Reduction.ho_corrections_array[i]))
+            SightReduction.ho_array_rfix.append(
+                np.deg2rad(Sight.ho_array[i] + SightReduction.ho_corrections_array[i]))
         return
 
     latitude_array = []
@@ -1087,21 +1080,21 @@ class Sight_Reduction(Sight):
                 hc = Angle(radians=(np.arcsin(
                     np.sin(np.deg2rad(lat)) * np.sin(dec) + np.cos(np.deg2rad(lat)) * np.cos(dec) * np.cos(
                         np.deg2rad(lha)))))
-                ho = Sight_Reduction.ho_array_rfix[i]
+                ho = SightReduction.ho_array_rfix[i]
                 int = ho - hc.radians
                 int_sum.append(int ** 2)
                 val = Sight.num_of_sights
             # Square root of the sum of the intercepts/num of sights
             return np.sqrt(np.sum(int_sum) / val)
 
-        self.dr_lat = dr_calc(Sight_session.dr_details[0][1], Sight_session.dr_details[0][2],
+        self.dr_lat = DRCalc(SightSession.dr_details[0][1], SightSession.dr_details[0][2],
+                             dt.timedelta.total_seconds(
+                                 SightSession.dr_details[0][9] - SightSession.dr_details[0][0]),
+                             SightSession.dr_details[0][3].degrees, SightSession.dr_details[0][4]).drlatfwds
+        self.dr_long = DRCalc(SightSession.dr_details[0][1], SightSession.dr_details[0][2],
                               dt.timedelta.total_seconds(
-                                  Sight_session.dr_details[0][9] - Sight_session.dr_details[0][0]),
-                              Sight_session.dr_details[0][3].degrees, Sight_session.dr_details[0][4]).drlatfwds
-        self.dr_long = dr_calc(Sight_session.dr_details[0][1], Sight_session.dr_details[0][2],
-                               dt.timedelta.total_seconds(
-                                   Sight_session.dr_details[0][9] - Sight_session.dr_details[0][0]),
-                               Sight_session.dr_details[0][3].degrees, Sight_session.dr_details[0][4]).drlongfwds
+                                  SightSession.dr_details[0][9] - SightSession.dr_details[0][0]),
+                              SightSession.dr_details[0][3].degrees, SightSession.dr_details[0][4]).drlongfwds
 
         # initial_guess is a DR position computed using the dr_calc class from the Sight_session DR position
         # to the fix_time specified using the course and speed information provided in Sight_session.dr_details
@@ -1147,7 +1140,7 @@ class Sight_Reduction(Sight):
         ########################################################################################################################
 
         ########################################################################################################################
-        self.fixtime = Sight_session.dr_details[0][9]
+        self.fixtime = SightSession.dr_details[0][9]
         if self.fit_latitude.degrees > 0:
             lat_sign = 'N'
             self.print_latitude = self.fit_latitude
@@ -1161,13 +1154,13 @@ class Sight_Reduction(Sight):
             long_sign = "W"
             self.print_longitude = Angle(degrees=(self.fit_longitude.degrees * -1))
 
-        self.final_l_string = f'L {Utilities.hmtstr(self.print_latitude.degrees)} {lat_sign}'
-        self.final_lon_string = f'λ {Utilities.hmtstr(self.print_longitude.degrees)} {long_sign}'
+        self.final_l_string = f'L {Utilities.hmt_str(self.print_latitude.degrees)} {lat_sign}'
+        self.final_lon_string = f'λ {Utilities.hmt_str(self.print_longitude.degrees)} {long_sign}'
 
-        Sight_Reduction.position_array_l.append(self.final_l_string)
-        Sight_Reduction.position_array_lon.append(self.final_lon_string)
-        Sight_Reduction.pos_array_lop_lat.append(self.fit_latitude.degrees)
-        Sight_Reduction.pos_array_lop_lon.append(self.fit_longitude.degrees)
+        SightReduction.position_array_l.append(self.final_l_string)
+        SightReduction.position_array_lon.append(self.final_lon_string)
+        SightReduction.pos_array_lop_lat.append(self.fit_latitude.degrees)
+        SightReduction.pos_array_lop_lon.append(self.fit_longitude.degrees)
 
     sight_analysis_lat_time_of_sight = []
     sight_analysis_long_time_of_sight = []
@@ -1199,85 +1192,85 @@ class Sight_Reduction(Sight):
 
         lat = float(self.fit_latitude.degrees)
         long = float(self.fit_longitude.degrees)
-        course = Sight_session.dr_details[0][3].degrees
-        speed = Sight_session.dr_details[0][4]
+        course = SightSession.dr_details[0][3].degrees
+        speed = SightSession.dr_details[0][4]
 
         for i in range(Sight.num_of_sights):
             """calculates lat and long dr positions for the EXACT time of each sight, working backwards from the 
             final fix """
 
-            previous_lat = dr_calc(lat, long, Sight_Reduction.time_delta_array[i], course, speed).drlatbackwards
-            previous_long = dr_calc(lat, long, Sight_Reduction.time_delta_array[i], course, speed).drlongbackwards
+            previous_lat = DRCalc(lat, long, SightReduction.time_delta_array[i], course, speed).drlatbackwards
+            previous_long = DRCalc(lat, long, SightReduction.time_delta_array[i], course, speed).drlongbackwards
 
-            Sight_Reduction.sight_analysis_lat_time_of_sight.append(previous_lat)
-            Sight_Reduction.sight_analysis_long_time_of_sight.append(previous_long)
+            SightReduction.sight_analysis_lat_time_of_sight.append(previous_lat)
+            SightReduction.sight_analysis_long_time_of_sight.append(previous_long)
             self.datetime = Sight.sight_times[i]
 
             body = Sight.body_array[i]
-            ephem = Utilities.get_GHADEC(body, self.datetime, Sight_Reduction.sight_analysis_lat_time_of_sight[i],
-                                         Sight_Reduction.sight_analysis_long_time_of_sight[i])
+            ephem = Utilities.get_gha_dec(body, self.datetime, SightReduction.sight_analysis_lat_time_of_sight[i],
+                                          SightReduction.sight_analysis_long_time_of_sight[i])
 
             gha = ephem[0]
             dec = ephem[1]
-            lat_hc = Angle(degrees=(Sight_Reduction.sight_analysis_lat_time_of_sight[i]))
-            long_hc = Angle(degrees=(Sight_Reduction.sight_analysis_long_time_of_sight[i]))
+            lat_hc = Angle(degrees=(SightReduction.sight_analysis_lat_time_of_sight[i]))
+            long_hc = Angle(degrees=(SightReduction.sight_analysis_long_time_of_sight[i]))
             lha = Angle(degrees=(gha.degrees + long_hc.degrees))
             hc = np.arcsin((np.sin(lat_hc.radians) * np.sin(dec.radians)) + (
                     np.cos(lat_hc.radians) * np.cos(dec.radians) * np.cos(lha.radians)))
 
-            Sight_Reduction.hc_timeofsight.append(np.rad2deg(hc))
+            SightReduction.hc_timeofsight.append(np.rad2deg(hc))
 
         for i in range(Sight.num_of_sights):
             """computes the DR position 1 minute AHEAD of the time of the sight using the set course/speed
             information """
-            previous_lat = dr_calc(lat, long, (Sight_Reduction.time_delta_array[i]) + 60, course, speed).drlatbackwards
-            previous_long = dr_calc(lat, long, (Sight_Reduction.time_delta_array[i]) + 60, course,
-                                    speed).drlongbackwards
+            previous_lat = DRCalc(lat, long, (SightReduction.time_delta_array[i]) + 60, course, speed).drlatbackwards
+            previous_long = DRCalc(lat, long, (SightReduction.time_delta_array[i]) + 60, course,
+                                   speed).drlongbackwards
 
-            Sight_Reduction.sight_analysis_lat_plus_one.append(previous_lat)
-            Sight_Reduction.sight_analysis_long_plus_one.append(previous_long)
+            SightReduction.sight_analysis_lat_plus_one.append(previous_lat)
+            SightReduction.sight_analysis_long_plus_one.append(previous_long)
             self.datetime = Sight.sight_times[i] + dt.timedelta(seconds=60)
 
             body = Sight.body_array[i]
-            ephem = Utilities.get_GHADEC(body, self.datetime, Sight_Reduction.sight_analysis_lat_plus_one[i],
-                                         Sight_Reduction.sight_analysis_long_plus_one[i])
+            ephem = Utilities.get_gha_dec(body, self.datetime, SightReduction.sight_analysis_lat_plus_one[i],
+                                          SightReduction.sight_analysis_long_plus_one[i])
 
             gha = ephem[0]
             dec = ephem[1]
 
-            lat_hc = Angle(degrees=(Sight_Reduction.sight_analysis_lat_time_of_sight[i]))
-            long_hc = Angle(degrees=(Sight_Reduction.sight_analysis_long_time_of_sight[i]))
+            lat_hc = Angle(degrees=(SightReduction.sight_analysis_lat_time_of_sight[i]))
+            long_hc = Angle(degrees=(SightReduction.sight_analysis_long_time_of_sight[i]))
             lha = Angle(degrees=(gha.degrees + long_hc.degrees))
             hc = np.arcsin((np.sin(lat_hc.radians) * np.sin(dec.radians)) + (
                     np.cos(lat_hc.radians) * np.cos(dec.radians) * np.cos(lha.radians)))
 
-            Sight_Reduction.hc_plusone.append(np.rad2deg(hc))
+            SightReduction.hc_plusone.append(np.rad2deg(hc))
 
         for i in range(Sight.num_of_sights):
             """computes DR lat and long one minute BEHIND the time of the sight using course/speed information"""
 
-            previous_lat = dr_calc(lat, long, Sight_Reduction.time_delta_array[i] - 60, course, speed).drlatbackwards
-            previous_long = dr_calc(lat, long, Sight_Reduction.time_delta_array[i] - 60, course,
-                                    speed).drlongbackwards
+            previous_lat = DRCalc(lat, long, SightReduction.time_delta_array[i] - 60, course, speed).drlatbackwards
+            previous_long = DRCalc(lat, long, SightReduction.time_delta_array[i] - 60, course,
+                                   speed).drlongbackwards
 
-            Sight_Reduction.sight_analysis_lat_minus_one.append(previous_lat)
-            Sight_Reduction.sight_analysis_long_minus_one.append(previous_long)
+            SightReduction.sight_analysis_lat_minus_one.append(previous_lat)
+            SightReduction.sight_analysis_long_minus_one.append(previous_long)
             self.datetime = Sight.sight_times[i] - dt.timedelta(seconds=60)
 
             body = Sight.body_array[i]
-            ephem = Utilities.get_GHADEC(body, self.datetime, Sight_Reduction.sight_analysis_lat_minus_one[i],
-                                         Sight_Reduction.sight_analysis_long_minus_one[i])
+            ephem = Utilities.get_gha_dec(body, self.datetime, SightReduction.sight_analysis_lat_minus_one[i],
+                                          SightReduction.sight_analysis_long_minus_one[i])
 
             gha = ephem[0]
             dec = ephem[1]
 
-            lat_hc = Angle(degrees=(Sight_Reduction.sight_analysis_lat_time_of_sight[i]))
-            long_hc = Angle(degrees=(Sight_Reduction.sight_analysis_long_time_of_sight[i]))
+            lat_hc = Angle(degrees=(SightReduction.sight_analysis_lat_time_of_sight[i]))
+            long_hc = Angle(degrees=(SightReduction.sight_analysis_long_time_of_sight[i]))
             lha = Angle(degrees=(gha.degrees + long_hc.degrees))
             hc = np.arcsin((np.sin(lat_hc.radians) * np.sin(dec.radians)) + (
                     np.cos(lat_hc.radians) * np.cos(dec.radians) * np.cos(lha.radians)))
 
-            Sight_Reduction.hc_minusone.append(np.rad2deg(hc))
+            SightReduction.hc_minusone.append(np.rad2deg(hc))
 
     d_array = []
 
@@ -1290,13 +1283,13 @@ class Sight_Reduction(Sight):
         plt.clf()
 
         def y_fmt(y, x):
-            """Uses Utilities.hmtstr to format matplotlib y-value ("dd°mm')
+            """Uses Utilities.hmt_str to format matplotlib y-value ("dd°mm')
             Parameters
             ----------
             y : float
             matplotlib longitude value in ddd.dddd
             """
-            return Utilities.hmtstr(y)
+            return Utilities.hmt_str(y)
 
         def datetime_to_float(d):
             """Converts dt.datetime value to timestamp() value
@@ -1311,10 +1304,10 @@ class Sight_Reduction(Sight):
 
             plt.style.use('dark_background')
 
-            one = Sight_Reduction.hc_plusone[i]
-            two = Sight_Reduction.hc_minusone[i]
+            one = SightReduction.hc_plusone[i]
+            two = SightReduction.hc_minusone[i]
             three = Sight.ho_array[i]
-            four = Sight_Reduction.hc_timeofsight[i]
+            four = SightReduction.hc_timeofsight[i]
 
             time1 = Sight.sight_times[i]
             time_before = Sight.sight_times[i] + dt.timedelta(seconds=60)
@@ -1376,17 +1369,17 @@ class Sight_Reduction(Sight):
 
             d = float((np.cross(p2 - p1, p3 - p1) / np.linalg.norm(p2 - p1)) * 60)
 
-            Sight_Reduction.d_array.append(d)
+            SightReduction.d_array.append(d)
 
             plt.title(f"{Sight.body_array[i]} || # {i + 1} || Scatter: %.2f' " % d, size=8, color='#f39c12')
 
-            # plt.text(time1.minute, four, f'{Utilities.hmtstr(four)}', size=8)
-            plt.text(time1.minute + .1, three, f'{Utilities.hmtstr(three)}', )
+            # plt.text(time1.minute, four, f'{Utilities.hmt_str(four)}', size=8)
+            plt.text(time1.minute + .1, three, f'{Utilities.hmt_str(three)}', )
             plt.yticks(rotation=45, size=6)
             plt.xticks(rotation=-45, size=6)
 
             # scatter values
-            d_dict[i] = Sight_Reduction.d_array[i]
+            d_dict[i] = SightReduction.d_array[i]
 
         # Sorts d values closest to 0
         sorted_values = sorted(d_dict.values(), key=lambda x: abs(x))
@@ -1423,10 +1416,10 @@ class Sight_Reduction(Sight):
         elif len(unique_list) == 1 and Sight.num_of_sights > 3:
             try:
                 for i in d_dict.keys():
-                    singlebodyelement = (Sight.body_array[i], i, Sight_Reduction.d_array[i], Sight.sight_times[i])
+                    singlebodyelement = (Sight.body_array[i], i, SightReduction.d_array[i], Sight.sight_times[i])
                     singlebodyelementarray.append(singlebodyelement)
 
-                singlebody = Utilities.singlebodytimedivide(singlebodyelementarray)
+                singlebody = Utilities.single_body_time_divide(singlebodyelementarray)
 
                 self.top_unique = singlebody
 
@@ -1517,8 +1510,8 @@ class Sight_Reduction(Sight):
             """iterate through sights, use index to extract relevant info from other arrays"""
             self.dec = Sight.dec_array_lop[i]
             self.gha = Sight.gha_array_lop[i]
-            self.long = Sight_Reduction.pos_array_lop_lon[0]
-            self.lat = np.deg2rad(Sight_Reduction.pos_array_lop_lat[0])
+            self.long = SightReduction.pos_array_lop_lon[0]
+            self.lat = np.deg2rad(SightReduction.pos_array_lop_lat[0])
             self.lha = np.deg2rad(((np.rad2deg(self.gha) + self.long) % 360))
             self.hc_rad = np.arcsin((np.sin(self.dec) * np.sin(self.lat)) + (
                     np.cos(self.dec) * np.cos(self.lat) * np.cos(self.lha)))
@@ -1535,7 +1528,7 @@ class Sight_Reduction(Sight):
 
             latx_list = []
             longx_list = []
-            ho = Sight_Reduction.ho_array_rfix[i]
+            ho = SightReduction.ho_array_rfix[i]
             Bx_r = self.Bx_r_i
             Bx_r_ = self.Bx_r_i
 
@@ -1601,8 +1594,8 @@ class Sight_Reduction(Sight):
                 # list of Longitudes that exists on LOP, selected from the longitude_buffet
                 longx_list.append(closest_long)
 
-            Sight_Reduction.latx_lists.append(latx_list)
-            Sight_Reduction.longx_lists.append(longx_list)
+            SightReduction.latx_lists.append(latx_list)
+            SightReduction.longx_lists.append(longx_list)
 
         return
 
@@ -1650,16 +1643,16 @@ class Sight_Reduction(Sight):
         self.ax.xaxis.set_major_formatter(mticker.FuncFormatter(x_fmt))
         plt.xticks(rotation=45)
 
-        for i in range(len(Sight_Reduction.latx_lists)):
-            y = Sight_Reduction.latx_lists[i]
-            x = Sight_Reduction.longx_lists[i]
+        for i in range(len(SightReduction.latx_lists)):
+            y = SightReduction.latx_lists[i]
+            x = SightReduction.longx_lists[i]
 
-            plt.plot(Sight_Reduction.longx_lists[i], Sight_Reduction.latx_lists[i],
+            plt.plot(SightReduction.longx_lists[i], SightReduction.latx_lists[i],
                      label=f'{Sight.body_array[i]} {Sight.sight_times[i]}')
             plt.legend(prop={'size': 7})
             plt.text(x[0] + .05, y[0] + .01, f'{Sight.body_array[i]}', size=9, color='#fff6')
 
-        plt.scatter(Sight_Reduction.pos_array_lop_lon[0], Sight_Reduction.pos_array_lop_lat[0], marker='o', color='red')
+        plt.scatter(SightReduction.pos_array_lop_lon[0], SightReduction.pos_array_lop_lat[0], marker='o', color='red')
 
         self.err_ellipse = Utilities.plot_cov_ellipse(self.res.hess_inv.todense(), (self.res.x[1], self.res.x[0]),
                                                       ax=self.ax, fc='none', edgecolor='#f39c12')
@@ -1667,7 +1660,7 @@ class Sight_Reduction(Sight):
         self.ax.add_patch(self.err_ellipse)
 
         plt.scatter(self.dr_long, self.dr_lat, marker='+')
-        plt.text(self.dr_long, self.dr_lat, f'{Sight_session.dr_details[0][9].strftime("%H:%M")} UTC DR', size=9,
+        plt.text(self.dr_long, self.dr_lat, f'{SightSession.dr_details[0][9].strftime("%H:%M")} UTC DR', size=9,
                  color='#00bc8c')
 
         plt.xlabel('Longitude', size=8, color='#fff6')
@@ -1676,7 +1669,7 @@ class Sight_Reduction(Sight):
         plt.title(f'Computed Fix: {self.final_l_string} {self.final_lon_string}')
 
         final_position = [self.final_l_string, self.final_lon_string]
-        Sight_Reduction.final_position_array.append(final_position)
+        SightReduction.final_position_array.append(final_position)
 
         stats_header2 = ["N/S ERROR 68% PROB.", "E/W ERROR 68% PROB.", "N/S ERROR 95% PROB.", "E/W ERROR 95% PROB.",
                          "Sys. Err."]
@@ -1685,9 +1678,9 @@ class Sight_Reduction(Sight):
                           f" (+/-) {np.round(((self.longitude_error * np.cos(np.deg2rad(self.res.x[0])) / 2)), 2)}",
                           f"(+/-) {np.round(((self.latitude_error)), 2)}",
                           f" (+/-) {np.round(((self.longitude_error * np.cos(np.deg2rad(self.res.x[0])))), 2)}",
-                          f'{np.round(np.mean(Sight_Reduction.d_array), 2)}']]
+                          f'{np.round(np.mean(SightReduction.d_array), 2)}']]
 
-        Sight_Reduction.stats_table_2.append(stats_table_2)
+        SightReduction.stats_table_2.append(stats_table_2)
 
         print(tabulate(stats_table_2, stats_header2))
         anl_table = []
@@ -1697,7 +1690,7 @@ class Sight_Reduction(Sight):
                       Sight.sight_times[x[1]].strftime("%Y-%m-%d %H:%M:%S UTC")]
             anl_table.append(string)
 
-        Sight_Reduction.sight_anl_table.append(anl_table)
+        SightReduction.sight_anl_table.append(anl_table)
         sight_anl_tbl = tabulate(anl_table, anl_headers, tablefmt='rst')
         print(sight_anl_tbl)
 
@@ -1705,9 +1698,9 @@ class Sight_Reduction(Sight):
 
         self.bigdata = (tabulate(Sight.data_table, headers, tablefmt='rst'))
         gui_position_data = (
-        Sight_session.dr_details[0][9].strftime("%Y-%m-%d %H:%M:%S UTC"), self.final_l_string, self.final_lon_string,
-        Utilities.print_position(self.dr_lat, latitude=True), Utilities.print_position(self.dr_long, latitude=False))
-        Sight_Reduction.gui_position_table.append(gui_position_data)
+            SightSession.dr_details[0][9].strftime("%Y-%m-%d %H:%M:%S UTC"), self.final_l_string, self.final_lon_string,
+            Utilities.print_position(self.dr_lat, latitude=True), Utilities.print_position(self.dr_long, latitude=False))
+        SightReduction.gui_position_table.append(gui_position_data)
 
         print(self.bigdata)
 

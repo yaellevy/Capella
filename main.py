@@ -17,7 +17,7 @@ from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.constants import *
 
 import cnav
-from cnav import Sight, Sight_session, Sight_Reduction
+from cnav import Sight, SightSession, SightReduction
 import pyperclip as pc
 import re
 from tabulate import tabulate
@@ -275,7 +275,7 @@ class PageOne(tk.Frame, Sight):
                 bootstyle=WARNING)
 
         def sight_data():
-            for i in Sight_Reduction.sight_anl_table:
+            for i in SightReduction.sight_anl_table:
                 sight = i
                 trvanl.insert('', 'end', text='', iid=sight, values=sight)
 
@@ -366,8 +366,8 @@ class PageOne(tk.Frame, Sight):
             for i in trvtriad.get_children():
                 trvtriad.delete(i)
             try:
-                latitude = cnav.Utilities.hmtstrtodecimald(t7.get(), t8.get())[0]
-                longitude = cnav.Utilities.hmtstrtodecimald(t8.get(), t8.get())[1]
+                latitude = cnav.Utilities.hmt_str_to_decimal_d(t7.get(), t8.get())[0]
+                longitude = cnav.Utilities.hmt_str_to_decimal_d(t8.get(), t8.get())[1]
                 # twilight and LAN times
                 phenomenatimes = cnav.Utilities.time_of_phenomena(t5.get(), t6.get(), latitude, longitude, t9.get(),
                                                                   t10.get())
@@ -391,11 +391,11 @@ class PageOne(tk.Frame, Sight):
             options = named_bodies + named_stars
 
             for body in options:
-                ephem = cnav.Utilities.get_GHADEC(body, datetime, latitude, longitude)
+                ephem = cnav.Utilities.get_gha_dec(body, datetime, latitude, longitude)
                 obsv = (body, ephem[3].degrees, ephem[4].degrees, ephem[5])
                 # constrain to visible bodies that are easily shot
                 if 10 < obsv[1] < 65:
-                    obsv = (body, cnav.Utilities.hmtstr(ephem[3].degrees), round(ephem[4].degrees), ephem[5])
+                    obsv = (body, cnav.Utilities.hmt_str(ephem[3].degrees), round(ephem[4].degrees), ephem[5])
                     possibleobvs.append(obsv)
 
             triads = []
@@ -459,18 +459,18 @@ class PageOne(tk.Frame, Sight):
             course = t9.get()
             speed = t10.get()
 
-            drlatstart = cnav.Utilities.hmtstrtodecimald(t7.get(), t8.get())[0]
-            drlongstart = cnav.Utilities.hmtstrtodecimald(t8.get(), t8.get())[1]
+            drlatstart = cnav.Utilities.hmt_str_to_decimal_d(t7.get(), t8.get())[0]
+            drlongstart = cnav.Utilities.hmt_str_to_decimal_d(t8.get(), t8.get())[1]
 
-            drlat = cnav.dr_calc(drlatstart, drlongstart, timed, float(course), float(speed)).drlatfwds
-            drlong = cnav.dr_calc(drlatstart, drlongstart, timed, float(course), float(speed)).drlongfwds
+            drlat = cnav.DRCalc(drlatstart, drlongstart, timed, float(course), float(speed)).drlatfwds
+            drlong = cnav.DRCalc(drlatstart, drlongstart, timed, float(course), float(speed)).drlongfwds
 
             planent3.insert(0, cnav.Utilities.print_position2(drlat, latitude=True))
             planent4.insert(0, cnav.Utilities.print_position2(drlong, latitude=False))
 
             sight_planning(cnav.Utilities.datetime(plan1.get(), plan2.get()),
-                           latitude=cnav.Utilities.hmtstrtodecimald(plan3.get(), plan4.get())[0],
-                           longitude=cnav.Utilities.hmtstrtodecimald(plan3.get(), plan4.get())[1])
+                           latitude=cnav.Utilities.hmt_str_to_decimal_d(plan3.get(), plan4.get())[0],
+                           longitude=cnav.Utilities.hmt_str_to_decimal_d(plan3.get(), plan4.get())[1])
 
 
 # Fit Slope Page
@@ -497,7 +497,7 @@ class PageTwo(ttk.Frame):
 
 
 
-class PageThree(ttk.Frame, Sight_Reduction):
+class PageThree(ttk.Frame, SightReduction):
 
     def __init__(self, parent, controller):
         ttk.Frame.__init__(self, parent)
@@ -528,7 +528,7 @@ class PageThree(ttk.Frame, Sight_Reduction):
 
 
 # Sight Entry Page
-class PageFour(ttk.Frame, Sight, Sight_session):
+class PageFour(ttk.Frame, Sight, SightSession):
     counter = 0
 
     def __init__(self, parent, controller):
@@ -732,7 +732,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
             session_str = ','.join(session_data_list)
             # instantiate Sight_session object
             global session
-            session = Sight_session(session_str)
+            session = SightSession(session_str)
 
             # adds sights for reduction
             for record in trv.get_children():
@@ -743,7 +743,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
 
             # instantiates Sight_Reduction object-calculates fix, calculates error statistics, plots LOPS
             global reduce
-            reduce = Sight_Reduction(True)
+            reduce = SightReduction(True)
 
             # Lop Plot/Clear for refresh - breaks zoom/pan
 
@@ -771,7 +771,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
 
             s.map('Treeview', background=[('selected', 'grey')])
             best_index = []
-            for i in Sight_Reduction.sight_anl_table[0]:
+            for i in SightReduction.sight_anl_table[0]:
                 sight = i
                 trvanl.insert('', 'end', text='', iid=sight, values=sight)
                 best_index.append(trvanl.item(i, 'values')[1])
@@ -787,33 +787,33 @@ class PageFour(ttk.Frame, Sight, Sight_session):
                     trv1.insert('', 'end', text='', iid=i, values=i)
 
             # enter statistical error table into treeview Page4
-            for i in Sight_Reduction.stats_table_2:
+            for i in SightReduction.stats_table_2:
                 item = i[0]
                 trverror.insert('', 'end', text='', iid=item, values=item)
 
             # enter fix data into treeview Page 4
-            for i in Sight_Reduction.gui_position_table:
+            for i in SightReduction.gui_position_table:
                 trvfix.tag_configure('best', background='DarkSeaGreen1', foreground='black', font=('Arial Bold', 10))
                 item = i
                 trvfix.insert('', 'end', text='', iid=item, values=item, tag=('best',))
 
-            systematicerr = np.mean(Sight_Reduction.d_array)
+            systematicerr = np.mean(SightReduction.d_array)
 
             # get z_scores in list
-            z_scores = scipy.stats.zscore(Sight_Reduction.d_array)
+            z_scores = scipy.stats.zscore(SightReduction.d_array)
             # if d value(scatter) has a z-score greater than 2, it is likely erroneous
-            for d in Sight_Reduction.d_array:
-                if abs(z_scores[Sight_Reduction.d_array.index(d)]) > 2.0:
-                    erroneous_body = Sight.body_array[Sight_Reduction.d_array.index(d)]
-                    erroneous_sighttime = Sight.sight_times[Sight_Reduction.d_array.index(d)]
+            for d in SightReduction.d_array:
+                if abs(z_scores[SightReduction.d_array.index(d)]) > 2.0:
+                    erroneous_body = Sight.body_array[SightReduction.d_array.index(d)]
+                    erroneous_sighttime = Sight.sight_times[SightReduction.d_array.index(d)]
                     Messagebox.show_question(
                         f'{erroneous_body} observation at {erroneous_sighttime} is likely erroneous.\nCorrect the '
                         f'observation or remove from Sight List, otherwise consider fix and analysis unreliable.')
 
             message = f"Capella found a Constant Error (Uncorrected Index Error + Personal Error) of {np.round(systematicerr, 2)}'.\n\nWould you like to remove this error and recompute? "
 
-            for d in Sight_Reduction.d_array:
-                d_corr = d * (1 / np.var(Sight_Reduction.d_array))
+            for d in SightReduction.d_array:
+                d_corr = d * (1 / np.var(SightReduction.d_array))
 
             # if the systematic error is greater than .25 arc minutes, something is off
             if abs(systematicerr) >= .25:
@@ -833,7 +833,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
                         hs_deg, hs_min = hs.split('-')
                         hs = (float(hs_deg) + (float(hs_min) / 60))
                         hs = Angle(degrees=(hs))
-                        hs = cnav.Utilities.hmtstr2(hs.degrees + (systematicerr))
+                        hs = cnav.Utilities.hmt_str_2(hs.degrees + (systematicerr))
                         trv.delete(i)
                         trv.insert('', 'end', text='', iid=i, values=(body, hs, date, time), tags=('main',))
                 else:
@@ -843,8 +843,8 @@ class PageFour(ttk.Frame, Sight, Sight_session):
             phenomena()
 
             # Sight_session
-            Sight_session.num_of_sights = 0
-            Sight_session.dr_details = []
+            SightSession.num_of_sights = 0
+            SightSession.dr_details = []
             # Sight
             Sight.data_table = []
             Sight.sight_times = []
@@ -866,33 +866,33 @@ class PageFour(ttk.Frame, Sight, Sight_session):
 
             # Sight_Reduction
 
-            Sight_Reduction.gui_position_table = []
-            Sight_Reduction.test_array
-            Sight_Reduction.final_position_array = []
-            Sight_Reduction.stats_table_2 = []
-            Sight_Reduction.latx_lists = []
-            Sight_Reduction.longx_lists = []
+            SightReduction.gui_position_table = []
+            SightReduction.test_array
+            SightReduction.final_position_array = []
+            SightReduction.stats_table_2 = []
+            SightReduction.latx_lists = []
+            SightReduction.longx_lists = []
 
-            Sight_Reduction.ho_array_rfix = []
-            Sight_Reduction.time_delta_array = []
-            Sight_Reduction.sight_anl_table = []
-            Sight_Reduction.final_ho_array = []
-            Sight_Reduction.pos_array_lop_lon = []
-            Sight_Reduction.pos_array_lop_lat = []
-            Sight_Reduction.d_array = []
-            Sight_Reduction.ho_corrections_array = []
-            Sight_Reduction.longitude_array = []
-            Sight_Reduction.latitude_array = []
-            Sight_Reduction.hc_timeofsight = []
-            Sight_Reduction.sight_analysis_lat_time_of_sight = []
-            Sight_Reduction.sight_analysis_long_time_of_sight = []
-            Sight_Reduction.sight_analysis_lat_minus_one = []
-            Sight_Reduction.sight_analysis_long_minus_one = []
-            Sight_Reduction.sight_analysis_lat_plus_one = []
-            Sight_Reduction.sight_analysis_long_plus_one = []
-            Sight_Reduction.hc_minusone = []
-            Sight_Reduction.hc_plusone = []
-            Sight_Reduction.position_array_l = []
+            SightReduction.ho_array_rfix = []
+            SightReduction.time_delta_array = []
+            SightReduction.sight_anl_table = []
+            SightReduction.final_ho_array = []
+            SightReduction.pos_array_lop_lon = []
+            SightReduction.pos_array_lop_lat = []
+            SightReduction.d_array = []
+            SightReduction.ho_corrections_array = []
+            SightReduction.longitude_array = []
+            SightReduction.latitude_array = []
+            SightReduction.hc_timeofsight = []
+            SightReduction.sight_analysis_lat_time_of_sight = []
+            SightReduction.sight_analysis_long_time_of_sight = []
+            SightReduction.sight_analysis_lat_minus_one = []
+            SightReduction.sight_analysis_long_minus_one = []
+            SightReduction.sight_analysis_lat_plus_one = []
+            SightReduction.sight_analysis_long_plus_one = []
+            SightReduction.hc_minusone = []
+            SightReduction.hc_plusone = []
+            SightReduction.position_array_l = []
 
             # Special cases
 
@@ -1257,7 +1257,7 @@ class PageFour(ttk.Frame, Sight, Sight_session):
                 hs = Angle(degrees=(hs))
                 hsList.append(hs.degrees)
 
-                hs_avg = cnav.Utilities.hmtstr2(np.mean(hsList))
+                hs_avg = cnav.Utilities.hmt_str_2(np.mean(hsList))
 
                 ent2.delete(0, 'end')
                 ent3.delete(0, 'end')
@@ -1423,7 +1423,7 @@ class PageFive(ttk.Frame, Sight):
             if body == 'Pier Hdg':
                 Messagebox.show_warning('Input Error', 'Enter Pier Heading')
 
-            ephem = cnav.Utilities.get_GHADEC(body, datetimeaz, latitude, longitude)
+            ephem = cnav.Utilities.get_gha_dec(body, datetimeaz, latitude, longitude)
 
             az = ephem[4]
 
