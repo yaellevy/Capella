@@ -1,5 +1,13 @@
 # Capella
 
+## Installation
+
+`pip install Capella`
+
+### To Run:
+Navigate to your python installation and go to `lib\site-packages` open the `Capella` directory in your terminal and run `main.py`, the GUI will open from the terminal.
+
+
 ### Introduction
 
 Capella is a simple-to-use Astronavigation aid. The program will derive a celestial position from a minimum of inputs and plot the position on a chartlet, with an analysis of the accuracy of  computed position provided. The program  additionally features some helper functions for celestial observation session planning, DR computation and compass correction. 
