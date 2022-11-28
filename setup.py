@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Capella",
-    version="1.0.2",
+    version="1.0.3",
     author="AlexSpradling",
     author_email="alexspradling@gmail.com",
     description="Capella Beta",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/AlexSpradling/Capellav1.1.git",
+    url="https://github.com/AlexSpradling/Capellav.git",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
