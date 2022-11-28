@@ -16,8 +16,8 @@ from ttkbootstrap.tooltip import ToolTip
 from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.constants import *
 
-import cnav
-from cnav import Sight, SightSession, SightReduction
+from Capella import cnav
+from Capella.cnav import Sight, SightSession, SightReduction
 import pyperclip as pc
 import re
 from tabulate import tabulate
@@ -58,7 +58,6 @@ class Capella(tk.Tk):
         #transparency
         self.attributes('-alpha', 0.97)
         ttk.Style("darkly")
-
         tk.Tk.wm_title(self, "Capella")
 
         # Add menu bar to top

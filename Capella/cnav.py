@@ -504,9 +504,6 @@ class Utilities():
         ax.add_artist(ellip)
         return ellip
 
-
-
-
 class DRCalc():
     """
     dr_calc() : will calculate a mercator sailing based on a position,
