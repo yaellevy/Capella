@@ -39,7 +39,7 @@ Capella features a high-accuracy perpetual almanac valid from the years 1900-205
 
 Capella will calculate a fix from the DR information provided in Step 1 and the sights added to the Sight List. A fix can be calculated from just one sight and the provided DR information, however the algorithm needs at least 2 sights to provide a more accurate fix. Once two or more sights are present in the *Sight List* and a *Fix Time* and *Fix Date* has been provided in the *Step 1* field, hit the *Compute* button or press *CTRL-l*. Capella will calculate a running fix based on the DR and *Fix Time* information provided. The calculated results as well as a DR position for the requested *Fix Time* will appear highlighted at the bottom. 
 
-The position calculation is provided by the robust Limited Memory-BFGS algorithm. This algorithm is robust with respect to erroneous DR information, will not converge to a local minimum and can effectively handle high altitude sights. Prudent navigation always requires the most accurate DR possible, however, the fitting algorithm is somewhat robust with respect to DR accuracy. 
+The position calculation is provided by the robust Limited Memory-BFGS algorithm. This algorithm is robust with respect to erroneous DR information, and can effectively handle high altitude sights. Prudent navigation always requires the most accurate DR possible, however, the fitting algorithm is somewhat robust with respect to DR accuracy. 
 
 *Example 1:*
 
