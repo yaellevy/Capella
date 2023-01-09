@@ -7,6 +7,7 @@
 ### To Run:
 Navigate to your python installation and go to `lib\site-packages` open the `Capella` directory in your terminal and run `main.py`, the GUI will open from the terminal.
 
+---
 
 ### Introduction
 
