@@ -13,6 +13,7 @@ Navigate to your python installation and go to `lib\site-packages` open the `Cap
 
 Capella is a simple-to-use Astronavigation aid. The program will derive a celestial position from a minimum of inputs and plot the position on a chartlet, with an analysis of the accuracy of  computed position provided. The program  additionally features some helper functions for celestial observation session planning, DR computation and compass correction. 
 
+![](gifs/demo.gif)
 ## Section 1: Sight Entry
 
 **DR Information**
@@ -21,7 +22,6 @@ All effective navigation starts with keeping a DR. Capella is no different. For 
 
 Capella uses the standard nautical conventions for time and position formatting, and all times are kept in UTC. Capella will format the input for you---just type in the numbers for the respective field and when you are finished press tab or click to advance to the next input field. If erroneous information has been inputted, the field will flag RED. 
 
-![](gifs/dr_setup.gif)
 
 **Sight Entry**
 
@@ -30,7 +30,6 @@ All sextant altitude corrections are handled internally, simply input the Hs val
 
 When you have completed the four input fields, hit the *Add* button and the sight will appear in the Sight List at the top of the screen. To edit previously entered information, click on the sight in the *Sight List*, the sight's information will populate the sight entry fields under Step 2. Make any required changes and hit *Update* and the sight entry will change in the *Sight List*. To remove a sight from the *Sight List*, simply click on the sight and hit *Delete*. Multiple sight handling is easily achieved using the conventional Shift or Ctrl + click features. 
 
-![](gifs/sight_entry.gif)
 
 *Averaging*
 
@@ -69,7 +68,6 @@ by changing the DR Position to 00-00.0-N and 000-00.0-W *--a position 3673 nm aw
 
 If Capella's systematic error algorithm detects uncorrected index and personal error, a prompt will appear asking you could like to remove the error from your observations and recompute the fix. Click *Ok* and then click *Compute*. This process can be iterative and the prompt might appear multiple times, with each cycle bringing the calculated fix closer to the observer's true position. This method isn't a magic bullet, but can yield impressive results in certain circumstances. 
 
-![](gifs/fix_comp.gif)
 
 **Loading and Saving Observation Records**
 
