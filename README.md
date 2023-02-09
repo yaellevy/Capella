@@ -178,7 +178,7 @@ The fit slope analysis shows that the Aldebaran observation at 03:07:00 scatters
 
 ![](gifs/blunder_2.png)
 
-*A fit slope analysis of sight session*
+*A fit slope analysis of a sight session, we see that of the two Aldebaran observations, one scatters far off of the correct slope and is likely a blunder*
 
 ---
 
