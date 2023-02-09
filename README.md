@@ -21,12 +21,16 @@ All effective navigation starts with keeping a DR. Capella is no different. For 
 
 Capella uses the standard nautical conventions for time and position formatting, and all times are kept in UTC. Capella will format the input for you---just type in the numbers for the respective field and when you are finished press tab or click to advance to the next input field. If erroneous information has been inputted, the field will flag RED. 
 
+![](gifs/dr_setup.gif)
+
 **Sight Entry**
 
 In the Step 2 section, complete the four required fields. All the input fields will assist with autocompletion and formatting. The fields are: 1. Body 2. Hs Value 3. Sight Date 4. Sight Time. 
 All sextant altitude corrections are handled internally, simply input the Hs value for the observation.
 
 When you have completed the four input fields, hit the *Add* button and the sight will appear in the Sight List at the top of the screen. To edit previously entered information, click on the sight in the *Sight List*, the sight's information will populate the sight entry fields under Step 2. Make any required changes and hit *Update* and the sight entry will change in the *Sight List*. To remove a sight from the *Sight List*, simply click on the sight and hit *Delete*. Multiple sight handling is easily achieved using the conventional Shift or Ctrl + click features. 
+
+![](gifs/sight_entry.gif)
 
 *Averaging*
 
@@ -65,6 +69,8 @@ by changing the DR Position to 00-00.0-N and 000-00.0-W *--a position 3673 nm aw
 
 If Capella's systematic error algorithm detects uncorrected index and personal error, a prompt will appear asking you could like to remove the error from your observations and recompute the fix. Click *Ok* and then click *Compute*. This process can be iterative and the prompt might appear multiple times, with each cycle bringing the calculated fix closer to the observer's true position. This method isn't a magic bullet, but can yield impressive results in certain circumstances. 
 
+![](gifs/fix_comp.gif)
+
 **Loading and Saving Observation Records**
 
 Capella uses the computer's clipboard as a means of loading and saving observations. Rather than saving the observations in a proprietary format, the observations are copied to the clipboard as a simple markdown format table than can be pasted into any .txt file the navigator wishes to use as a sight log. 
@@ -93,6 +99,7 @@ Capella uses the computer's clipboard as a means of loading and saving observati
 | SunLL  | 65-03.4 | 2012-07-06 | 12:29:22 |
 ```
 
+![](gifs/saving_loading.gif)
 
 
 ## Section 2: LOP Plot
@@ -111,6 +118,7 @@ The LOPS are automatically advanced with the course and speed information provid
 
 The red dot on the LOP plot marks the computed position and the golden ellipse surrounding the computed fix represents an area of 95% confidence. That is, there is a 95% probability, *given the sight information provided* that the true position lies within the ellipse.
 
+![](gifs/confidence_ellipse.png)
 ## Section 3: Fit Slope Analysis
 
 This is an implementation of Dr. David Burch's Fit Slope method. It is a means of deriving greater accuracy from our sight observations and attempting to spot any outliers or potential blunders. 
@@ -286,5 +294,7 @@ The fit-slope plots show that 2 of our Sirius shots scatter above the fitted lin
 
 We calculate the fix for 05:18:00 and get the following fix: 21-51.5 N, 155-41.0 W. We go back to the LOP plot section and note a nice tight cocked hat and small confidence ellipse -- with a small amount of logical deduction we've turned a fairly messy fix into what looks like a pretty good one. We note the ship's GPS log and see that our 05:18:00 UTC position was 21-51.2, 155-41.4, *we were only .55 NM off*. Pleased, we wink at the third mate, put the sextant back in the box and stroll off of the bridge, only to hurry down the ladderwell to our stateroom--*we have to be back on watch in 5 hours*.
 
+### Above Steps Demonstrated
 
+![](gifs/poa_shots.gif)
 
