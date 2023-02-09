@@ -13,7 +13,10 @@ Navigate to your python installation and go to `lib\site-packages` open the `Cap
 
 Capella is a simple-to-use Astronavigation aid. The program will derive a celestial position from a minimum of inputs and plot the position on a chartlet, with an analysis of the accuracy of  computed position provided. The program  additionally features some helper functions for celestial observation session planning, DR computation and compass correction. 
 
+
 ![](gifs/demo.gif)
+
+---
 ## Section 1: Sight Entry
 
 **DR Information**
@@ -35,6 +38,14 @@ When you have completed the four input fields, hit the *Add* button and the sigh
 
 If you have multiple observations of the same body, you can CTRL or SHIFT click on them in the Sight Entry area, and the average of their Hs and time/date values will appear in the Step 2-Entry area. Press the *Add* button to add the averaged sight. It is recommended you first compute the position with all sights unaveraged and use the *Fit-Slope Analysis* feature to find which values should be eschewed or kept for averaging.
 
+![](gifs/blunder_3.png)
+
+*LOP plot before fit-slope analysis and sight averaging*
+
+![](gifs/blunder_fixed.png)
+
+*LOP plot after fit-slop analysis and sight averaging*
+
 *Almanac Computation*
 
 Capella features a high-accuracy perpetual almanac valid from the years 1900-2050, with the data taken from the JPL de421 database. Once the fix is computed, all almanac data is displayed in the *Sight Data/Planning* section. 
@@ -43,7 +54,7 @@ Capella features a high-accuracy perpetual almanac valid from the years 1900-205
 
 Capella will calculate a fix from the DR information provided in Step 1 and the sights added to the Sight List. A fix can be calculated from just one sight and the provided DR information, however the algorithm needs at least 2 sights to provide a more accurate fix. Once two or more sights are present in the *Sight List* and a *Fix Time* and *Fix Date* has been provided in the *Step 1* field, hit the *Compute* button or press *CTRL-l*. Capella will calculate a running fix based on the DR and *Fix Time* information provided. The calculated results as well as a DR position for the requested *Fix Time* will appear highlighted at the bottom. 
 
-The position calculation is provided by the robust Limited Memory-BFGS algorithm. This algorithm is robust with respect to erroneous DR information, and can effectively handle high altitude sights. Prudent navigation always requires the most accurate DR possible, however, the fitting algorithm is somewhat robust with respect to DR accuracy. 
+A position is calculated using a Limited Memory-BFGS algorithm. The algorithm is robust with respect to erroneous DR information, and can effectively handle high altitude sights. Prudent navigation always requires the most accurate DR possible, however, the fitting algorithm is quite robust with respect to DR accuracy. 
 
 *Example 1:*
 
@@ -99,6 +110,8 @@ Capella uses the computer's clipboard as a means of loading and saving observati
 
 ![](gifs/saving_loading.gif)
 
+---
+
 
 ## Section 2: LOP Plot
 
@@ -117,6 +130,8 @@ The LOPS are automatically advanced with the course and speed information provid
 The red dot on the LOP plot marks the computed position and the golden ellipse surrounding the computed fix represents an area of 95% confidence. That is, there is a 95% probability, *given the sight information provided* that the true position lies within the ellipse.
 
 ![](gifs/confidence_ellipse.png)
+
+---
 ## Section 3: Fit Slope Analysis
 
 This is an implementation of Dr. David Burch's Fit Slope method. It is a means of deriving greater accuracy from our sight observations and attempting to spot any outliers or potential blunders. 
@@ -156,6 +171,16 @@ The following observations are taken and a fix of 21-11.0-N, 157-34.7-W is compu
 
 The fit slope analysis shows that the Aldebaran observation at 03:07:00 scatters 9.79 arc minutes under the computed slope while the other Aldebaran observations are + 0.64' and + 1.74' respectively. This observation is clearly a blunder, and the LOP plot confirms that it is far away from our other LOPS so it is removed altogether from the *Sight List* and a new position is computed: 
 21-12.0-N, 157-31.5-W. The position can be further refined, by either selecting the individual sights with the least scatter, or averaging each set since the Fit-Slope analysis confirms their normal distribution, both methods will yield a fix with a similar level of accuracy. 
+
+![](gifs/blunder.png)
+
+*Capella screens for potentially erroneous shots using statistical tests and will alert the user to a potential blunder*
+
+![](gifs/blunder_2.png)
+
+*A fit slope analysis of sight session*
+
+---
 
 ## Section 4: Planning/Session Data
 
@@ -248,6 +273,8 @@ A table with the one and two Sigma errors for the fitting algorithm converted in
 
 Celestial Navigation under the most optimal and rigorous circumstances can provide a positional accuracy of around 1 nm, it is not a GPS. As always the prudent navigator uses more than one means of position fixing to navigate.
 
+---
+
 ## Section 5: Azimuth
 
 
@@ -295,4 +322,10 @@ We calculate the fix for 05:18:00 and get the following fix: 21-51.5 N, 155-41.0
 ### Above Steps Demonstrated
 
 ![](gifs/poa_shots.gif)
+
+---
+#### Disclaimer:
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
 
