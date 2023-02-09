@@ -329,3 +329,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---
 
+### About
+
+Capt. Alex Spradling holds 1600 Ton Master Oceans, and 2nd Mate Unlimited Tonnage Oceans Licenses and actively sails as a deck officer in the U.S. Merchant Marine. He is a graduate of SUNY Maritime COllege. 
