@@ -251,5 +251,40 @@ In the *Observation Input* section, fill in the required input fields with the b
 
 The output is provided in the *Compass Observations Records* field in the exact format used in the usual *Compass Observation Book* required by IMO standards. The Gyro Error, Compass Error, and Magnetic Variation and Magnetic Deviation are calculated. Magnetic Variation can be calculated for any position in the world and uses the World Magnetic Model Epoch 2020. The list of gaussian coefficients is internal to the program and is valid through 2025. 
 
+--- 
+
+# A short, true, sea story (An end-to-end example of usage)
+
+We're on a large commercial vessel steaming from the Pacific Northwest to Hawaii at a speed of 12 kts on a course of 251. It's 19:55 ship's time, the third mate is back on the bridge, and we've been relieved of the watch. The third mate pours a cup of coffee and jokes that the sun has just set and star time is upon us. "Show off your fancy program!" he says. "Sure!", we say. We grab the ship's sextant from under the chart table and fire up *Capella*.
+
+We enter our DR information, using 05:00:00 UTC as our DR time and choose DR coordinates we know we are within 100 NM of. We're  being deliberately vague. We know our height of eye to within about 30 feet so we guess that its 158 feet. It's a big ship. 
+
+We proceed to the sight planning section and enter 05:15:00 as the time we'd like to generate sights for. We won't preset our sextant, we just want a general orientation of the evening's sky. We note the brightest and most visible stars and planets, quickly scratch them down, and then grab the sextant and head out on the bridge wing.  
+
+Once outside we find the sky is largely overcast. A quick shot of the horizon suggests the index error is around 2.0' on the arc. We look up and scan the sky. Sirius pops through the clouds and we grab 3 quick sights in succession. About 10 minutes later Rigel briefly shows up in between the clouds and we're able to grab 2 quick sights. Capella briefly emerges and we're able to get one shot, but then the clouds shroud the star and it remains hidden. Discouraged, we grab 2 quick lower limb shots of the moon and head back to the chart room. The shots were fast and likely not very precise, we don't expect much. The third mate is amused at our obvious frustration.
+
+We write everything down and look over the shots:
+
+```
+| Body    | Hs      | Date       | Time     |
+| ------- | ------- | ---------- | -------- |
+| Sirius  | 51-13.8 | 2022-03-18 | 05:04:06 |
+| Sirius  | 51-12.2 | 2022-03-18 | 05:05:44 |
+| Sirius  | 51-22.1 | 2022-03-18 | 05:07:16 |
+| Rigel   | 54-15.2 | 2022-03-18 | 05:15:48 |
+| Rigel   | 54-21.5 | 2022-03-18 | 05:17:16 |
+| Capella | 61-34.0 | 2022-03-18 | 05:13:42 |
+| MoonLL  | 11-30.5 | 2022-03-18 | 05:18:57 |
+| MoonLL  | 11-45.6 | 2022-03-18 | 05:20:25 |
+```
+
+We enter all of our sights and  calculate a fix using all of the observations. Immediately, *Capella* prompts us with a message box saying that something is likely wrong with our 05:17:16 Rigel observation. We look at the LOP plot and notice that it is an obvious blunder. 
+
+We remove the Rigel shot and re-compute the fix. We are now greeted with a message box saying that there is systematic error in our observations and are asked if we would like to recompute. We decided to first use the fit-slope analysis tool to see if any one shot is adding extra weight to the error calculation. 
+
+The fit-slope plots show that 2 of our Sirius shots scatter above the fitted line, while the middle observation scatters below. An analysis of the LOP's also suggests that our middle Sirius shot is a potential outlier. We remove the second Sirius observation and average the rest of the sights. We again calculate our position and are again greeted with a box asking us to remove systematic error. It's clear we've overestimated our height of eye or incorrectly deduced our index our, so we click yes and remove the error and recompute our position again and receive no more messages. 
+
+We calculate the fix for 05:18:00 and get the following fix: 21-51.5 N, 155-41.0 W. We go back to the LOP plot section and note a nice tight cocked hat and small confidence ellipse -- with a small amount of logical deduction we've turned a fairly messy fix into what looks like a pretty good one. We note the ship's GPS log and see that our 05:18:00 UTC position was 21-51.2, 155-41.4, *we were only .55 NM off*. Pleased, we wink at the third mate, put the sextant back in the box and stroll off of the bridge, only to hurry down the ladderwell to our stateroom--*we have to be back on watch in 5 hours*.
+
 
 
