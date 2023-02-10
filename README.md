@@ -288,9 +288,9 @@ The output is provided in the *Compass Observations Records* field in the exact 
 
 # A short, true, sea story (An end-to-end example of usage)
 
-We're on a large commercial vessel steaming from the Pacific Northwest to Hawaii at a speed of 12 kts on a course of 251. It's 19:55 ship's time, the third mate is back on the bridge, and we've been relieved of the watch. The third mate pours a cup of coffee and jokes that the sun has just set and star time is upon us. "Show off your fancy program!" he says. "Sure!", we say. We grab the ship's sextant from under the chart table and fire up *Capella*.
+We're on a large commercial vessel steaming from the Pacific Northwest to Hawaii at a speed of 12 kts on a course of 251 True. It's 19:55 ship's time, the third mate is back on the bridge, and we've been relieved of the watch. The third mate pours a cup of coffee and jokes that the sun has just set and star time is upon us. "Show off your fancy program!" he says. "Sure!", we say. We grab the ship's sextant from under the chart table and fire up *Capella*.
 
-We enter our DR information, using 05:00:00 UTC as our DR time and choose DR coordinates we know we are within 100 NM of. We're  being deliberately vague. We know our height of eye to within about 30 feet so we guess that its 158 feet. It's a big ship. 
+We enter our DR information, using 05:00:00 UTC as our DR time and choose DR coordinates we know we are within 100 NM of. We're  being deliberately vague. We know our height of eye to within 30 feet so we guess that its 158 feet. It's a big ship. 
 
 We proceed to the sight planning section and enter 05:15:00 as the time we'd like to generate sights for. We won't preset our sextant, we just want a general orientation of the evening's sky. We note the brightest and most visible stars and planets, quickly scratch them down, and then grab the sextant and head out on the bridge wing.  
 
