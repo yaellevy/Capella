@@ -44,7 +44,7 @@ If you have multiple observations of the same body, you can CTRL or SHIFT click 
 
 ![](gifs/blunder_fixed.png)
 
-*LOP plot after fit-slop analysis and sight averaging*
+*LOP plot after fit-slope analysis and sight averaging*
 
 *Almanac Computation*
 
