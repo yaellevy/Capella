@@ -44,7 +44,7 @@ If you have multiple observations of the same body, you can CTRL or SHIFT click 
 
 ![](gifs/blunder_fixed.png)
 
-*LOP plot after fit-slop analysis and sight averaging*
+*LOP plot after fit-slope analysis and sight averaging*
 
 *Almanac Computation*
 
@@ -178,7 +178,7 @@ The fit slope analysis shows that the Aldebaran observation at 03:07:00 scatters
 
 ![](gifs/blunder_2.png)
 
-*A fit slope analysis of sight session*
+*A fit slope analysis of a sight session, we see that of the two Aldebaran observations, one scatters far off of the correct slope and is likely a blunder*
 
 ---
 
@@ -288,9 +288,9 @@ The output is provided in the *Compass Observations Records* field in the exact 
 
 # A short, true, sea story (An end-to-end example of usage)
 
-We're on a large commercial vessel steaming from the Pacific Northwest to Hawaii at a speed of 12 kts on a course of 251. It's 19:55 ship's time, the third mate is back on the bridge, and we've been relieved of the watch. The third mate pours a cup of coffee and jokes that the sun has just set and star time is upon us. "Show off your fancy program!" he says. "Sure!", we say. We grab the ship's sextant from under the chart table and fire up *Capella*.
+We're on a large commercial vessel steaming from the Pacific Northwest to Hawaii at a speed of 12 kts on a course of 251 True. It's 19:55 ship's time, the third mate is back on the bridge, and we've been relieved of the watch. The third mate pours a cup of coffee and jokes that the sun has just set and star time is upon us. "Show off your fancy program!" he says. "Sure!", we say. We grab the ship's sextant from under the chart table and fire up *Capella*.
 
-We enter our DR information, using 05:00:00 UTC as our DR time and choose DR coordinates we know we are within 100 NM of. We're  being deliberately vague. We know our height of eye to within about 30 feet so we guess that its 158 feet. It's a big ship. 
+We enter our DR information, using 05:00:00 UTC as our DR time and choose DR coordinates we know we are within 100 NM of. We're  being deliberately vague. We know our height of eye to within 30 feet so we guess that its 158 feet. It's a big ship. 
 
 We proceed to the sight planning section and enter 05:15:00 as the time we'd like to generate sights for. We won't preset our sextant, we just want a general orientation of the evening's sky. We note the brightest and most visible stars and planets, quickly scratch them down, and then grab the sextant and head out on the bridge wing.  
 
@@ -315,9 +315,9 @@ We enter all of our sights and  calculate a fix using all of the observations. I
 
 We remove the Rigel shot and re-compute the fix. We are now greeted with a message box saying that there is systematic error in our observations and are asked if we would like to recompute. We decided to first use the fit-slope analysis tool to see if any one shot is adding extra weight to the error calculation. 
 
-The fit-slope plots show that 2 of our Sirius shots scatter above the fitted line, while the middle observation scatters below. An analysis of the LOP's also suggests that our middle Sirius shot is a potential outlier. We remove the second Sirius observation and average the rest of the sights. We again calculate our position and are again greeted with a box asking us to remove systematic error. It's clear we've overestimated our height of eye or incorrectly deduced our index our, so we click yes and remove the error and recompute our position again and receive no more messages. 
+The fit-slope plots show that 2 of our Sirius shots scatter above the fitted line, while the middle observation scatters below. An analysis of the LOP's also suggests that our middle Sirius shot is a potential outlier. We remove the second Sirius observation and average the rest of the sights. We again calculate our position and are again greeted with a message box asking us to remove systematic error. It's clear we've overestimated our height of eye or incorrectly deduced our index error, so we click yes and remove the error and recompute our position again and receive no more messages. 
 
-We calculate the fix for 05:18:00 and get the following fix: 21-51.5 N, 155-41.0 W. We go back to the LOP plot section and note a nice tight cocked hat and small confidence ellipse -- with a small amount of logical deduction we've turned a fairly messy fix into what looks like a pretty good one. We note the ship's GPS log and see that our 05:18:00 UTC position was 21-51.2, 155-41.4, *we were only .55 NM off*. Pleased, we wink at the third mate, put the sextant back in the box and stroll off of the bridge, only to hurry down the ladderwell to our stateroom--*we have to be back on watch in 5 hours*.
+The fix was calculated for 05:18:00 and we get the following prediction: 21-51.5 N, 155-41.0 W. We go back to the LOP plot section and note a nice tight cocked hat and small confidence ellipse -- with a small amount of logical deduction we've turned a fairly messy fix into what looks like a pretty good one. We note the ship's GPS log and see that our 05:18:00 UTC position was 21-51.2, 155-41.4, *we were only .55 NM off*. Pleased, we wink at the third mate, put the sextant back in the box and stroll off of the bridge, only to hurry down the ladderwell to our stateroom--*we have to be back on watch in 5 hours*.
 
 ### Above Steps Demonstrated
 
@@ -329,3 +329,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---
 
+### About
+
+Capt. Alex Spradling holds 1600 Ton Master Oceans, and 2nd Mate Unlimited Tonnage Oceans Licenses and actively sails as a deck officer in the U.S. Merchant Marine. He is a graduate of SUNY Maritime College. 
