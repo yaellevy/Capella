@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Capella",
-    version="1.0.3",
+    version="1.0.4",
     author="AlexSpradling",
     author_email="alexspradling@gmail.com",
     description="Capella Beta",
