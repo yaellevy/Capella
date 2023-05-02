@@ -47,6 +47,7 @@ class Capella(tk.Tk):
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+
         # configure appearance
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
@@ -55,8 +56,9 @@ class Capella(tk.Tk):
         x = (screen_width / 2) - (app_width / 2)
         y = (screen_height / 2.2) - (app_height / 2)
         self.geometry(f'{int(app_width)}x{int(app_height)}+{int(x)}+{int(y)}')
+        
         #transparency
-        self.attributes('-alpha', 0.97)
+        self.attributes('-alpha', 1.0)
         ttk.Style("darkly")
         tk.Tk.wm_title(self, "Capella")
 
@@ -494,6 +496,9 @@ class PageTwo(ttk.Frame):
         toolbar.update()
         canvas2._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
+        def get_canvas2(self):
+            return canvas2
+
 
 
 class PageThree(ttk.Frame, SightReduction):
@@ -521,6 +526,10 @@ class PageThree(ttk.Frame, SightReduction):
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
         return
+    
+        def get_canvas(self):
+            return canvas
+
 
         controller.bind('<Control-p', reduce_sight)
         controller.bind('<Control-l', load_sights_from_clipboard)
@@ -1342,7 +1351,6 @@ class PageFour(ttk.Frame, Sight, SightSession):
             # autocorrects lower cases
             try:
                 if len(t8.get()) == 10 and t8.get()[-1] == 'e' or t8.get()[-1] == 'w':
-
                     if t8.get()[-1] == 'e':
                         ent8.delete(9)
                         ent8.insert(10, 'E')

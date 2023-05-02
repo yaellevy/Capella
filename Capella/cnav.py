@@ -1354,10 +1354,10 @@ class SightReduction(Sight):
                     plt.subplots_adjust(left=.057, bottom=.052, right=.979, top=.93, wspace=.248, hspace=.42)
 
             plt.plot(x, y)
-            # plt.scatter(time_before.minute, two)
-            # plt.scatter(time_after.minute, one)
+
+
             plt.scatter(time1, three, color='red')
-            # plt.scatter(time1.minute, four)
+
 
             p1 = np.array([datetime_to_float(time_after), one], dtype=object)
             p2 = np.array([datetime_to_float(time_before), two], dtype=object)
